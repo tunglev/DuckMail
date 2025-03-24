@@ -1,38 +1,35 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 import config from './config';
-import routes from './routes';
+const uri = config.mongodbUri;
 
-// Create Express app
-const app = express();
+if (!uri) {
+	throw new Error('MONGODB_URI is not defined in the environment variables');
+}
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Connect to MongoDB
-mongoose
-  .connect(config.mongodbUri)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-  });
-
-// API Routes
-app.use('/api', routes);
-
-// Basic route for testing
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to DuckMail API' });
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+	serverApi: {
+		version: ServerApiVersion.v1,
+		strict: true,
+		deprecationErrors: true,
+	},
 });
 
-// Start server
-const PORT = config.port;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} in ${config.nodeEnv} mode`);
-}); 
+async function run() {
+	try {
+		// Connect the client to the server	(optional starting in v4.7)
+		await client.connect();
+		// Send a ping to confirm a successful connection
+		await client.db('admin').command({ ping: 1 });
+		console.log('Pinged your deployment. You successfully connected to MongoDB!');
+    //write data to the database
+    const database = client.db('duckmail');
+    const collection = database.collection('users');
+    const result = await collection.insertOne({name: 'John', age: 30});
+    console.log(result);
+	} finally {
+		// Ensures that the client will close when you finish/error
+		await client.close();
+	}
+}
+run().catch(console.dir);
