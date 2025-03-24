@@ -35,8 +35,11 @@ export const userApi = {
 
   getById: async (id: string): Promise<User> => {
     const response = await fetch(`${API_URL}/users/${id}`);
+    const jsonResponse = await response.json();
+    const data = jsonResponse["data"];
+    console.log(data);
     if (!response.ok) throw new Error(`Failed to get user with ID ${id}`);
-    return response.json();
+    return data;
   },
 
   create: async (user: User): Promise<User> => {
@@ -73,7 +76,9 @@ export const messageApi = {
     try {
       const response = await fetch(`${API_URL}/messages`);
       if (!response.ok) throw new Error('Failed to get messages');
-      const data = await response.json();
+      const jsonResponse = await response.json();
+      const data = jsonResponse["data"];
+      console.log(data);
       return Array.isArray(data) ? data : [];
     } catch (err) {
       console.error('Error fetching messages:', err);
@@ -91,7 +96,9 @@ export const messageApi = {
     try {
       const response = await fetch(`${API_URL}/messages/recipient/${recipient}`);
       if (!response.ok) throw new Error(`Failed to get messages for recipient ${recipient}`);
-      const data = await response.json();
+      const jsonResponse = await response.json();
+      const data = jsonResponse["data"];
+      console.log(data);
       return Array.isArray(data) ? data : [];
     } catch (err) {
       console.error('Error fetching messages by recipient:', err);
