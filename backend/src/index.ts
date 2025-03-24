@@ -1,35 +1,40 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
 import config from './config';
-const uri = config.mongodbUri;
+import routes from './routes';
 
-if (!uri) {
-	throw new Error('MONGODB_URI is not defined in the environment variables');
-}
+// Initialize express app
+const app = express();
+const PORT = config.port;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-	serverApi: {
-		version: ServerApiVersion.v1,
-		strict: true,
-		deprecationErrors: true,
-	},
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Connect to MongoDB with proper SSL options
+mongoose.connect(config.mongodbUri, {
+	// Set to true to allow connecting to Atlas
+	tlsAllowInvalidCertificates: true 
+})
+	.then(() => console.log('Connected to MongoDB'))
+	.catch(err => {
+		console.error('Could not connect to MongoDB', err);
+		console.log('Make sure you have whitelisted your IP address in MongoDB Atlas Network Access settings');
+	});
+
+// Routes
+app.use('/api', routes);
+
+// Basic route
+app.get('/', (req, res) => {
+	res.send('DuckMail API is running');
 });
 
-async function run() {
-	try {
-		// Connect the client to the server	(optional starting in v4.7)
-		await client.connect();
-		// Send a ping to confirm a successful connection
-		await client.db('admin').command({ ping: 1 });
-		console.log('Pinged your deployment. You successfully connected to MongoDB!');
-    //write data to the database
-    const database = client.db('duckmail');
-    const collection = database.collection('users');
-    const result = await collection.insertOne({name: 'John', age: 30});
-    console.log(result);
-	} finally {
-		// Ensures that the client will close when you finish/error
-		await client.close();
-	}
-}
-run().catch(console.dir);
+// Start server
+app.listen(PORT, () => {
+	console.log(`Server running on port ${PORT} in ${config.nodeEnv} mode`);
+});
+
+export default app;
