@@ -17,7 +17,7 @@ This is the backend API for the DuckMail application, built with Node.js, Expres
 4. Create a `.env` file in the root of the backend directory with the following variables:
    ```
    PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/duckmail
+   MONGODB_URI=mongodb+srv://<username>:<password>@duckmail-backendtest.vm3ll.mongodb.net/?retryWrites=true&w=majority&appName=duckmail-backendTest
    NODE_ENV=development
    ```
    Adjust the MONGODB_URI as needed for your MongoDB setup.
