@@ -1,155 +1,251 @@
+/* Modern Minimalist Styling for DuckMail */
+:root {
+  --primary-color: #3498db;
+  --primary-dark: #2980b9;
+  --accent-color: #1abc9c;
+  --text-color: #333333;
+  --text-light: #7f8c8d;
+  --border-color: #ecf0f1;
+  --bg-color: #ffffff;
+  --card-bg: #f9f9f9;
+  --danger-color: #e74c3c;
+  --success-color: #2ecc71;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --radius: 8px;
+  --transition: all 0.2s ease;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --accent-color: #1abc9c;
+    --text-color: #ecf0f1;
+    --text-light: #bdc3c7;
+    --border-color: #2c3e50;
+    --bg-color: #1a1a1a;
+    --card-bg: #2c3e50;
+  }
+}
+
+/* App container */
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  color: var(--text-color);
 }
 
+/* Header styling */
 header {
   margin-bottom: 2rem;
 }
 
 header h1 {
-  margin-bottom: 1rem;
-  color: #f8f8f8;
+  font-size: 2rem;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.5px;
 }
 
+/* Tab navigation */
 .tabs {
   display: flex;
-  border-bottom: 1px solid #ddd;
   margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tabs button {
-  padding: 0.75rem 1.5rem;
   background: none;
   border: none;
-  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 2px solid transparent;
   margin-right: 1rem;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #666;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .tabs button:hover {
-  color: #333;
+  color: var(--text-color);
 }
 
 .tabs button.active {
-  color: #0084ff;
-  border-bottom-color: #0084ff;
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
 }
 
+/* Panel container */
 .panel {
-  background-color: #220145;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
+  background-color: var(--bg-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
 }
 
+/* Form elements */
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-light);
 }
 
 .form-group input, 
 .form-group textarea, 
 .form-group select {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
   font-size: 1rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: var(--transition);
 }
 
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Buttons */
 .button {
-  background-color: #0084ff;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .button:hover {
-  background-color: #0066cc;
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(0);
 }
 
 .button:disabled {
-  background-color: #ccc;
+  background-color: var(--text-light);
   cursor: not-allowed;
+  transform: none;
 }
 
 .button.delete {
-  background-color: #ff3860;
+  background-color: var(--danger-color);
 }
 
-.button.delete:hover {
-  background-color: #e03456;
+.button + .button {
+  margin-left: 0.5rem;
 }
 
+/* Data display */
 .data-display {
   margin-top: 2rem;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  padding: 1rem;
-  background-color: #5b13c7;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background-color: var(--card-bg);
 }
 
 .data-display pre {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
   white-space: pre-wrap;
   word-break: break-all;
 }
 
+/* Cards */
 .card {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.25rem;
   margin-bottom: 1rem;
-  cursor: pointer;
-  transition: box-shadow 0.2s;
+  background-color: var(--card-bg);
+  transition: var(--transition);
 }
 
 .card:hover {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
 }
 
 .card.selected {
-  border-color: #0084ff;
-  background-color: #5b0deb;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
 }
 
+.card p {
+  margin-bottom: 0.5rem;
+}
+
+.card div {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Section styling */
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.section h2, .section h3 {
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  color: var(--text-color);
 }
 
 .section h2 {
-  margin-bottom: 1rem;
-  color: #333;
-  border-bottom: 1px solid #eee;
+  font-size: 1.5rem;
   padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
+.section h3 {
+  font-size: 1.25rem;
+}
+
+/* Status messages */
 .loading {
   text-align: center;
   padding: 2rem;
-  color: #666;
+  color: var(--text-light);
+  font-style: italic;
 }
 
 .error {
-  color: #ff3860;
+  color: var(--danger-color);
   margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background-color: rgba(231, 76, 60, 0.1);
 }
 
 .success {
-  color: #23d160;
+  color: var(--success-color);
   margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background-color: rgba(46, 204, 113, 0.1);
 }

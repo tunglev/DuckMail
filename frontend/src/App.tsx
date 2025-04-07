@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="app-container">
       <header>
-        <h1>DuckMail API Tester</h1>
+        <h1>Frontend - DuckMail API Tester</h1>
         <div className="tabs">
           <button 
             className={activeTab === 'users' ? 'active' : ''} 
