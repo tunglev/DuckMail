@@ -1,0 +1,14 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Comments 3" clip-path="url(#clip0_24_197)">
+<g id="Comments">
+<path id="shape-1" fill-rule="evenodd" clip-rule="evenodd" d="M12.5 5H17.5C21.6421 5 25 8.35786 25 12.5V17.5C25 21.6421 21.6421 25 17.5 25H5V12.5C5 8.35786 8.35786 5 12.5 5Z" stroke="#A649DA" stroke-width="2" stroke-linecap="round"/>
+<path id="shape-2" d="M11.25 17.5H15" stroke="#A649DA" stroke-width="2" stroke-linecap="round"/>
+<path id="shape-3" d="M11.25 12.5H18.75" stroke="#A649DA" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_24_197">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>

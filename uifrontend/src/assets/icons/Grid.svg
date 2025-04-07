@@ -1,0 +1,15 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Grid 2" clip-path="url(#clip0_24_222)">
+<g id="Grid">
+<path id="shape-1" d="M10.625 5H6.875C5.83947 5 5 5.83947 5 6.875V10.625C5 11.6605 5.83947 12.5 6.875 12.5H10.625C11.6605 12.5 12.5 11.6605 12.5 10.625V6.875C12.5 5.83947 11.6605 5 10.625 5Z" stroke="#FFC400" stroke-width="2" stroke-linecap="round"/>
+<path id="shape-2" d="M10.625 17.5H6.875C5.83947 17.5 5 18.3395 5 19.375V23.125C5 24.1605 5.83947 25 6.875 25H10.625C11.6605 25 12.5 24.1605 12.5 23.125V19.375C12.5 18.3395 11.6605 17.5 10.625 17.5Z" stroke="#FFC400" stroke-width="2" stroke-linecap="round"/>
+<path id="shape-3" d="M23.125 5H19.375C18.3395 5 17.5 5.83947 17.5 6.875V10.625C17.5 11.6605 18.3395 12.5 19.375 12.5H23.125C24.1605 12.5 25 11.6605 25 10.625V6.875C25 5.83947 24.1605 5 23.125 5Z" stroke="#FFC400" stroke-width="2" stroke-linecap="round"/>
+<path id="shape-4" d="M23.125 17.5H19.375C18.3395 17.5 17.5 18.3395 17.5 19.375V23.125C17.5 24.1605 18.3395 25 19.375 25H23.125C24.1605 25 25 24.1605 25 23.125V19.375C25 18.3395 24.1605 17.5 23.125 17.5Z" stroke="#FFC400" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_24_222">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>

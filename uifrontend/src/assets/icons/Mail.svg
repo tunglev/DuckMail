@@ -1,0 +1,15 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mail 2" clip-path="url(#clip0_24_204)">
+<g id="Page-1">
+<g id="Mail">
+<path id="Rectangle" d="M22.5 6.25H7.5C6.11929 6.25 5 7.36929 5 8.75V21.25C5 22.6307 6.11929 23.75 7.5 23.75H22.5C23.8807 23.75 25 22.6307 25 21.25V8.75C25 7.36929 23.8807 6.25 22.5 6.25Z" stroke="#30C04F" stroke-width="2" stroke-linecap="round"/>
+<path id="Path" d="M25 8.75L15.375 15.9687C15.1528 16.1354 14.8472 16.1354 14.625 15.9687L5 8.75" stroke="#30C04F" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_24_204">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>
