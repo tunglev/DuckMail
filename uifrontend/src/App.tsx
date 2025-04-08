@@ -21,7 +21,7 @@ function App() {
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
 
-  const buttonsData = [
+  const notificationData = [
     {
       type: 'Policy',
       priority: 'High',
@@ -66,9 +66,33 @@ function App() {
     },
   ];
 
+  const [buttonsData, setButtonsData] = useState(notificationData);
+
+  const handleToggle = (indexInFiltered: number) => {
+    // Get index in buttonsData
+    const filteredButtons = buttonsData.filter(
+      (button) => filterState === 'All' || button.type === filterState
+    );
+
+    const buttonToUpdate = filteredButtons[indexInFiltered];
+    const indexInFullList = buttonsData.findIndex(
+      (b) => b.subject === buttonToUpdate.subject && b.type === buttonToUpdate.type
+    );
+
+    const updatedButtons = [...buttonsData];
+    updatedButtons[indexInFullList].active = !updatedButtons[indexInFullList].active;
+    setButtonsData(updatedButtons);
+  };
+
   const filteredButtons = buttonsData.filter(
     (button) => filterState === 'All' || button.type === filterState
   );
+
+  // const handleToggle = (index: number) => {
+  //   const updated = [...buttonData];
+  //   updated[index].active = !updated[index].active;
+  //   setButtonData(updated);
+  // };
 
   // const [buttons, setButtons] = useState(filteredButtons);
 
@@ -131,7 +155,7 @@ function App() {
         minWidth={'25vh'}
         bg="#212026"
       >
-        <Text mb="34px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="19px">Filters</Text>
+        <Text mb="25px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="19px">Filters</Text>
         <Flex direction="column" gap="12px">
           <Button display="flex"
             alignItems="center"
@@ -211,7 +235,10 @@ function App() {
         // minHeight={'695px'}
         // minWidth={'956px'}
         minHeight={'75vh'}
+        maxHeight={'75vh'}
         minWidth={'125vh'}
+        maxWidth={'125vh'}
+        overflowY="auto"
         bg="#282730"
       >
         <Text mb="20px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="19px">Notifications</Text>
@@ -219,10 +246,13 @@ function App() {
 
         {filteredButtons.map((button, index) => (
           <Button display="flex"
+          key={index}
+          onClick={() => handleToggle(index)}
           alignItems="center"
           justifyContent="space-between"  // Spread out the text and icon
           width="100%"  // Ensures button takes full width
-          height="3.5vh"
+          // height="15vh"
+          height={button.active ? 'auto' : '5vh'}
           gap="10px"
           textAlign="left" 
           fontFamily="Poppins" 
@@ -233,19 +263,19 @@ function App() {
           fontSize="14px" 
           borderRadius="8px"
           p="12px">
-          {/* onClick={() => handleButtonClick(index)}> */}
-            {/* <Flex direction="column" gap="5px"> */}
+            <Flex direction="column" gap={button.active === true ? "5px" : "0px"}>
             <Flex gap="25px">
               <Text><Text as="span" color="#B2A5FF">Type: </Text>{button.type}</Text> 
               <Text><Text as="span" color="#B2A5FF">Priority: </Text>{button.priority}</Text> 
               <Text><Text as="span" color="#B2A5FF">Subject: </Text>{button.subject}</Text> 
             </Flex>
 
-            {/* <Text color="white" wordBreak="break-word" whiteSpace="normal"> */}
-            {/* <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">Message: </Text><Text as="span" fontWeight="500" fontSize="13px">Lorem ipsum odor amet, consectetuer adipiscing elit. Cras aliquet posuere metus; mattis tempor venenatis sociosqu cras sit. Est hendrerit libero ipsum libero ridiculus tristique nullam nascetur adipiscing. Class turpis justo primis ac vivamus maecenas maximus? Fringilla ligula facilisis pretium velit aliquet vulputate. Vel pellentesque nullam elementum lorem vel praesent nullam. Conubia quis netus fusce aliquet lobortis metus mus. Turpis tempor id praesent pulvinar consequat. Lorem ipsum odor amet, consectetuer adipiscing elit. Cras aliquet posuere metus; mattis tempor venenatis sociosqu cras sit. Est hendrerit libero ipsum libero ridiculus tristique nullam nascetur adipiscing. Class turpis justo primis ac vivamus maecenas maximus? Fringilla ligula facilisis pretium velit aliquet vulputate. Vel pellentesque nullam elementum lorem vel praesent nullam. Conubia quis netus fusce aliquet lobortis metus mus. Turpis tempor id praesent pulvinar consequat.</Text> */}
-            {/* </Text> */}
-            
-            {/* </Flex> */}
+            {button.active && (
+              <Text color="white" wordBreak="break-word" whiteSpace="normal">
+                <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">Message: </Text><Text as="span" fontWeight="500" fontSize="13px">Lorem ipsum odor amet, consectetuer adipiscing elit. Cras aliquet posuere metus; mattis tempor venenatis sociosqu cras sit. Est hendrerit libero ipsum libero ridiculus tristique nullam nascetur adipiscing.</Text>
+              </Text>
+            )}
+            </Flex>
 
           <img src={button.active === true ? UpdownIcon : DropdownIcon} alt="Icon" />
           </Button>
