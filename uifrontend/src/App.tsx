@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState } from 'react';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
 
-import { Heading, Text, Box, Button, Flex } from "@chakra-ui/react"
+import { Heading, Text, Box, Button, Flex } from "@chakra-ui/react";
 // import SettingsIcon from './assets/icons/SettingsButton.svg';
 import ClockIcon from './assets/icons/Clock.svg';
 import GridIcon from './assets/icons/Grid.svg';
@@ -12,14 +12,14 @@ import CommentsIcon from './assets/icons/Comments.svg';
 import DropdownIcon from './assets/icons/Dropdown.svg';
 import UpdownIcon from './assets/icons/Updown.svg';
 
-import Popup from './components/popup';
+import Popup from './components/popup.tsx';
 
 function App() {
+  const [open, setOpen] = useState(false);
   const [filterState, setFilterState] = useState('All');
-  const [isOpen, setIsOpen] = useState(false);
 
-  const onOpen = () => setIsOpen(true);
-  const onClose = () => setIsOpen(false);
+  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true);
 
   const notificationData = [
     {
@@ -88,31 +88,8 @@ function App() {
     (button) => filterState === 'All' || button.type === filterState
   );
 
-  // const handleToggle = (index: number) => {
-  //   const updated = [...buttonData];
-  //   updated[index].active = !updated[index].active;
-  //   setButtonData(updated);
-  // };
-
-  // const [buttons, setButtons] = useState(filteredButtons);
-
-  // const handleButtonClick = (index: number) => {
-  //   setButtons((prevButtons) => {
-  //     // Toggle the 'active' field of the clicked button
-  //     const updatedButtons = [...prevButtons];
-  //     updatedButtons[index].active = !updatedButtons[index].active;
-  //     return updatedButtons;
-  //   });
-  // };
-
   return (
     <>
-    {/* <Box>
-      <Heading p={'20px'} fontFamily={'Poppins'} fontWeight={'bold'} color={'white'} fontSize={'29px'}>
-          Duck <Text as={'a'} color={'#B2A5FF'}>Mail</Text> <Button textAlign={'right'} color={'#B2A5FF'}>Mail</Button>
-        </Heading>
-    </Box> */}
-      
       <Flex
       justify="space-between"
       align="center"
@@ -127,17 +104,11 @@ function App() {
       </Heading>
 
       <Flex gap="10px">
-        <Button onClick={onOpen} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+        <Button onClick={handleOpen} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
           Compose
         </Button>
-
-        {/* <Button fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" padding={'10px'} fontSize="16px">
-          <img src={SettingsIcon} alt="Icon" />
-        </Button> */}
       </Flex>
     </Flex>
-
-    <Popup isOpen={isOpen} onClose={onClose} />
 
     <Flex
       justify="center"  // Center horizontally
@@ -149,10 +120,8 @@ function App() {
       <Box
         p="20px"
         borderRadius="8px"
-        // minHeight={'695px'}
-        // minWidth={'259px'}
-        minHeight={'75vh'}
-        minWidth={'25vh'}
+        h={'75vh'}
+        w={'25vh'}
         bg="#212026"
       >
         <Text mb="25px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="19px">Filters</Text>
@@ -232,12 +201,8 @@ function App() {
       <Box
         p="20px"
         borderRadius="8px"
-        // minHeight={'695px'}
-        // minWidth={'956px'}
-        minHeight={'75vh'}
-        maxHeight={'75vh'}
-        minWidth={'125vh'}
-        maxWidth={'125vh'}
+        h={'75vh'}
+        w={'125vh'}
         overflowY="auto"
         bg="#282730"
       >
@@ -282,6 +247,9 @@ function App() {
         ))}
         </Flex>
       </Box>
+
+      <Popup open={open} onClose={handleClose} />
+
     </Flex>
 
     </>

@@ -1,61 +1,123 @@
-// src/components/Popup.tsx
+// Popup.tsx
+import { Box, Button, Flex, Input, Text, Textarea } from '@chakra-ui/react';
+import { Select as ChakraSelect } from '@chakra-ui/select';
 
-import React from 'react';
-import { Box, Button, Text, Input, Select, Stack, Flex } from '@chakra-ui/react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/modal';
+import CloseIcon from '../assets/icons/Close.svg';
 
 interface PopupProps {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
 }
 
-function Popup({ isOpen, onClose }: PopupProps) {
+function Popup({ open, onClose }: PopupProps) {
+  if (!open) return null;
+
   return (
-    // <Box>
     <>
-      {/* Modal (Popup) */}
-      <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          {/* Modal Header */}
-          <ModalHeader>
-            <Flex justify="space-between">
-              <Text>Popup Title</Text>
-              <Button onClick={onClose} size="sm">Close</Button>
+      <Box position="absolute" w="100%" h="100%" bg="#212026" opacity="0.4" zIndex={8} />
+
+      <Box
+        position="absolute"
+        w="70vh"
+        h="50vh"
+        bg="#322F3E"
+        zIndex={10}
+        p={8}
+        borderRadius="10px"
+      >
+        {/* Top Row: Text and Close Button */}
+        <Flex justify="space-between" align="center" mb={6}>
+          <Text mb="10px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="22px">
+            Compose
+          </Text>
+          <Button mb="10px" size="0px" onClick={onClose} bg="#B2A5FF" variant="solid">
+            <img src={CloseIcon} alt="Icon" />
+          </Button>
+        </Flex>
+
+        {/* Centered Form */}
+        <Flex direction="column" align="center" gap={4}>
+          {/* Recipient Input */}
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
+            <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
+              Recipient:
+            </Text>
+            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter recipient here" w="100%" />
+          </Box>
+
+          {/* Subject Input */}
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
+            <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
+              Subject:
+            </Text>
+            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" />
+          </Box>
+
+          {/* Notification Type Select */}
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
+            <Text as="span" paddingRight="10px" fontWeight="600" fontSize="14px" color="#B2A5FF">Notification&nbsp;Type:</Text>
+            <ChakraSelect
+              border="0px"
+              color="#CAC6C6"
+              focusBorderColor="transparent"
+              _focus={{ boxShadow: 'none' }}
+              bg="#45444D"
+              placeholder="Select Notification Type"
+              w="100%"
+              _hover={{ bg: "#383737" }}
+              _expanded={{ bg: "#383737" }}
+              icon={<></>}
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+              }}
+            >
+              <option value="Policy">Policy</option>
+              <option value="News">News</option>
+              <option value="Claim">Claim</option>
+            </ChakraSelect>
+
+            <Text as="span" paddingRight="10px" fontWeight="600" fontSize="14px" color="#B2A5FF">
+              Priority:
+            </Text>
+            <ChakraSelect
+              border="0px"
+              color="#CAC6C6"
+              focusBorderColor="transparent"
+              _focus={{ boxShadow: 'none' }}
+              bg="#45444D"
+              placeholder="Select Priority Type"
+              w="100%"
+              _hover={{ bg: "#383737" }}
+              _expanded={{ bg: "#383737" }}
+              icon={<></>}
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+              }}
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </ChakraSelect>
+          </Box>
+
+          {/* Message Textarea */}
+          <Box display="flex" alignItems="top" justifyContent="space-between" width="100%" height="17vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
+            <Flex direction="column" align="left" gap={0} w="100%">
+              <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
+                Message:
+              </Text>
+              <Textarea p="0px" border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" h="100%" />
             </Flex>
-          </ModalHeader>
+          </Box>
 
-          {/* Modal Body */}
-          <ModalBody>
-            <Stack>
-              {/* First row: Text and close button */}
-              <Flex justify="space-between" align="center">
-                <Text>Some instructions or text here</Text>
-                <Button size="sm" onClick={onClose}>Close</Button>
-              </Flex>
-
-              {/* Textboxes */}
-              <Input placeholder="Textbox 1" />
-              <Input placeholder="Textbox 2" />
-              
-              {/* Dropdown */}
-              {/* <Select placeholder="Select an option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-              </Select> */}
-              
-              {/* Another Textbox */}
-              <Input placeholder="Textbox 3" />
-            </Stack>
-          </ModalBody>
-
-          {/* Modal Footer with Close Button */}
-          <ModalFooter>
-            <Button onClick={onClose}>Close Popup</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          {/* Submit Button */}
+          <Button onClick={onClose} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+            Compose
+          </Button>
+        </Flex>
+      </Box>
     </>
   );
 }
