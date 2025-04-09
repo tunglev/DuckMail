@@ -14,15 +14,16 @@ function Popup({ open, onClose }: PopupProps) {
 
   return (
     <>
-      <Box position="absolute" w="100%" h="100%" bg="#212026" opacity="0.4" zIndex={8} />
+      <Box position="absolute" w="100%" h="110%" bg="#212026" opacity="0.4" zIndex={8} />
 
       <Box
         position="absolute"
         w="70vh"
-        h="50vh"
+        h="60vh"
         bg="#322F3E"
         zIndex={10}
         p={8}
+        mb={50}
         borderRadius="10px"
       >
         {/* Top Row: Text and Close Button */}
@@ -62,7 +63,7 @@ function Popup({ open, onClose }: PopupProps) {
               focusBorderColor="transparent"
               _focus={{ boxShadow: 'none' }}
               bg="#45444D"
-              placeholder="Select Notification Type"
+              placeholder="Select Type"
               w="100%"
               _hover={{ bg: "#383737" }}
               _expanded={{ bg: "#383737" }}
@@ -86,7 +87,7 @@ function Popup({ open, onClose }: PopupProps) {
               focusBorderColor="transparent"
               _focus={{ boxShadow: 'none' }}
               bg="#45444D"
-              placeholder="Select Priority Type"
+              placeholder="Select Type"
               w="100%"
               _hover={{ bg: "#383737" }}
               _expanded={{ bg: "#383737" }}

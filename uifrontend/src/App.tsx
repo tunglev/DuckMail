@@ -120,8 +120,10 @@ function App() {
       <Box
         p="20px"
         borderRadius="8px"
-        h={'75vh'}
-        w={'25vh'}
+        // h={'75vh'}
+        // w={'25vh'}
+        minHeight={'75vh'}
+        minWidth={'25vh'}
         bg="#212026"
       >
         <Text mb="25px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="19px">Filters</Text>
@@ -201,8 +203,12 @@ function App() {
       <Box
         p="20px"
         borderRadius="8px"
-        h={'75vh'}
-        w={'125vh'}
+        // h={'75vh'}
+        // w={'125vh'}
+        minHeight={'75vh'}
+        maxHeight={'75vh'}
+        minWidth={'125vh'}
+        maxWidth={'125vh'}
         overflowY="auto"
         bg="#282730"
       >
