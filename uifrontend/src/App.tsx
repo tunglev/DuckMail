@@ -4,6 +4,7 @@ import { useState } from 'react';
 import './App.css';
 
 import { Heading, Text, Box, Button, Flex } from "@chakra-ui/react";
+import { Toaster, toaster } from "@/components/ui/toaster";
 // import SettingsIcon from './assets/icons/SettingsButton.svg';
 import ClockIcon from './assets/icons/Clock.svg';
 import GridIcon from './assets/icons/Grid.svg';
@@ -254,7 +255,8 @@ function App() {
         </Flex>
       </Box>
 
-      <Popup open={open} onClose={handleClose} />
+      <Toaster />
+      <Popup open={open} toaster={toaster} onClose={handleClose} />
 
     </Flex>
 

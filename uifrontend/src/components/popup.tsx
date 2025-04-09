@@ -1,16 +1,27 @@
 // Popup.tsx
 import { Box, Button, Flex, Input, Text, Textarea } from '@chakra-ui/react';
 import { Select as ChakraSelect } from '@chakra-ui/select';
+import { toaster } from "@/components/ui/toaster";
 
 import CloseIcon from '../assets/icons/Close.svg';
 
 interface PopupProps {
   open: boolean;
+  toaster: any;
   onClose: () => void;
 }
 
 function Popup({ open, onClose }: PopupProps) {
   if (!open) return null;
+
+  const composeNotification = () => {
+    toaster.create({
+      description: "Notification Composed Successfully!",
+      type: "success",
+      duration: 5000,
+    });
+    onClose();
+  };
 
   return (
     <>
@@ -114,7 +125,7 @@ function Popup({ open, onClose }: PopupProps) {
           </Box>
 
           {/* Submit Button */}
-          <Button onClick={onClose} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+          <Button onClick={composeNotification} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
             Compose
           </Button>
         </Flex>
