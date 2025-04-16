@@ -3,18 +3,25 @@ import './App.css'
 import UserPanel from './components/UserPanel'
 import MessagePanel from './components/MessagePanel'
 import AuthPanel from './components/AuthPanel'
-import { AuthUser } from './services/api'
+import { AuthUser, authApi } from './services/api'
 
 function App() {
   const [activeTab, setActiveTab] = useState<'users' | 'messages' | 'auth'>('users')
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null)
-  // Removed unused state
 
   const handleAuthChange = (user: AuthUser | null) => {
     setCurrentUser(user)
     if (user) {
-      // Removed unused state update
+      // If user logs in, switch to messages tab
+      setActiveTab('messages')
     }
+  }
+  
+  // Handle logout directly from header
+  const handleLogout = () => {
+    authApi.logout();
+    setCurrentUser(null);
+    setActiveTab('auth');
   }
 
   return (
@@ -28,9 +35,9 @@ function App() {
                 Welcome, {currentUser.firstName}!
                 <button 
                   className="button auth-button"
-                  onClick={() => setActiveTab('auth')}
+                  onClick={handleLogout}
                 >
-                  Account
+                  Logout
                 </button>
               </div>
             ) : (
@@ -69,7 +76,7 @@ function App() {
       
       <main>
         {activeTab === 'users' && <UserPanel />}
-        {activeTab === 'messages' && <MessagePanel />}
+        {activeTab === 'messages' && <MessagePanel currentUser={currentUser} />}
         {activeTab === 'auth' && <AuthPanel onAuthChange={handleAuthChange} />}
       </main>
     </div>

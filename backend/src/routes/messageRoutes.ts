@@ -6,6 +6,7 @@ import {
   createMessage,
   updateMessage,
   deleteMessage,
+  getMessagesByUsername
 } from '../controllers/messageController';
 
 const router = express.Router();
@@ -15,6 +16,9 @@ router.get('/', getAllMessages);
 
 // Get messages by recipient
 router.get('/recipient/:recipient', getMessagesByRecipient);
+
+// Get messages by username (either as sender or recipient)
+router.get('/user/:username', getMessagesByUsername);
 
 // Get a single message by ID
 router.get('/:id', getMessageById);
@@ -28,4 +32,4 @@ router.put('/:id', updateMessage);
 // Delete a message
 router.delete('/:id', deleteMessage);
 
-export default router; 
+export default router;

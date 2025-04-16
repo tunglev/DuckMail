@@ -157,6 +157,21 @@ export const messageApi = {
       return [];
     }
   },
+  
+  // New method to get messages for a specific user (both sent and received)
+  getUserMessages: async (username: string): Promise<Message[]> => {
+    try {
+      const response = await fetch(`${API_URL}/messages/user/${username}`);
+      if (!response.ok) throw new Error(`Failed to get messages for user ${username}`);
+      const jsonResponse = await response.json();
+      const data = jsonResponse["data"];
+      console.log(data);
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      console.error('Error fetching user messages:', err);
+      return [];
+    }
+  },
 
   create: async (message: Message): Promise<Message> => {
     const response = await fetch(`${API_URL}/messages`, {

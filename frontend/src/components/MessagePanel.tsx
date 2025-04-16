@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
-import { Message, messageApi } from '../services/api';
+import { Message, messageApi, authApi, AuthUser } from '../services/api';
 
-const MessagePanel = () => {
+interface MessagePanelProps {
+  currentUser?: AuthUser | null;
+}
+
+const MessagePanel = ({ currentUser }: MessagePanelProps = {}) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [formData, setFormData] = useState<Message>({
@@ -16,10 +21,45 @@ const MessagePanel = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [searchRecipient, setSearchRecipient] = useState('');
 
+  // Get current user on component mount if not provided through props
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    const user = currentUser || authApi.getCurrentUser();
+    if (user?.username) {
+      // Initialize sender field with current user's username
+      setFormData(prev => ({
+        ...prev,
+        sender: user.username
+      }));
+    }
+    fetchUserMessages();
+  }, [currentUser]);
 
+  // Fetch messages where the current user is sender or recipient
+  const fetchUserMessages = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const user = currentUser || authApi.getCurrentUser();
+      
+      if (!user) {
+        setError("Please log in to view messages");
+        setMessages([]);
+        setLoading(false);
+        return;
+      }
+      
+      // Use the new endpoint to fetch user's messages
+      const data = await messageApi.getByRecipient(user.email);
+      setMessages(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError('Failed to fetch messages: ' + (err instanceof Error ? err.message : String(err)));
+      setMessages([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Original fetchMessages function is kept for admin purposes
   const fetchMessages = async () => {
     try {
       setLoading(true);
@@ -90,7 +130,22 @@ const MessagePanel = () => {
     try {
       setLoading(true);
       setError(null);
-      const newMessage = await messageApi.create(formData);
+      
+      // Ensure sender is the current user
+      const user = currentUser || authApi.getCurrentUser();
+      if (!user) {
+        setError("Please log in to send messages");
+        setLoading(false);
+        return;
+      }
+      
+      // Force set sender to current user's username
+      const messageToSend = {
+        ...formData,
+        sender: user.username
+      };
+      
+      const newMessage = await messageApi.create(messageToSend);
       setMessages([...messages, newMessage]);
       setSuccess('Message created successfully!');
       resetForm();
@@ -138,8 +193,9 @@ const MessagePanel = () => {
 
   const resetForm = () => {
     setSelectedMessage(null);
+    const user = currentUser || authApi.getCurrentUser();
     setFormData({
-      sender: '',
+      sender: user?.username || '',
       recipient: '',
       subject: '',
       body: '',
@@ -154,10 +210,10 @@ const MessagePanel = () => {
         <div className="form-group" style={{ display: 'flex', gap: '10px' }}>
           <button 
             className="button" 
-            onClick={fetchMessages}
+            onClick={fetchUserMessages}
             disabled={loading}
           >
-            Refresh All Messages
+            Refresh My Messages
           </button>
         </div>
 
@@ -191,7 +247,7 @@ const MessagePanel = () => {
         ) : (
           <>
             <div className="section">
-              <h3>Messages List</h3>
+              <h3>My Messages</h3>
               {!messages || messages.length === 0 ? (
                 <p>No messages found</p>
               ) : (
@@ -236,7 +292,7 @@ const MessagePanel = () => {
             </div>
 
             <div className="section">
-              <h3>{selectedMessage ? 'Update Message' : 'Create Message'}</h3>
+              <h3>{selectedMessage ? 'Update Message' : 'Compose New Message'}</h3>
               <form onSubmit={selectedMessage ? handleUpdateMessage : handleCreateMessage}>
                 <div className="form-group">
                   <label htmlFor="sender">Sender</label>
@@ -246,8 +302,12 @@ const MessagePanel = () => {
                     name="sender"
                     value={formData.sender}
                     onChange={handleInputChange}
+                    disabled={!selectedMessage} // Disable editing for new messages
                     required
                   />
+                  {!selectedMessage && (
+                    <small>Sender is automatically set to your username</small>
+                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="recipient">Recipient</label>
@@ -296,7 +356,7 @@ const MessagePanel = () => {
                 </div>
                 <div className="form-group">
                   <button type="submit" className="button" disabled={loading}>
-                    {selectedMessage ? 'Update Message' : 'Create Message'}
+                    {selectedMessage ? 'Update Message' : 'Send Message'}
                   </button>
                   {selectedMessage && (
                     <button
@@ -318,4 +378,4 @@ const MessagePanel = () => {
   );
 };
 
-export default MessagePanel; 
+export default MessagePanel;

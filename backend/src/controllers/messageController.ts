@@ -22,6 +22,30 @@ export const getMessagesByRecipient = async (req: Request, res: Response): Promi
   }
 };
 
+// Get messages by username (either as sender or recipient)
+export const getMessagesByUsername = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { username } = req.params;
+    
+    if (!username) {
+      res.status(400).json({ success: false, error: 'Username is required' });
+      return;
+    }
+    
+    // Find messages where the user is either the sender or recipient
+    const messages = await Message.find({
+      $or: [
+        { sender: username },
+        { recipient: username }
+      ]
+    });
+    
+    res.status(200).json({ success: true, data: messages });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 // Get a single message by ID
 export const getMessageById = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -94,4 +118,4 @@ export const deleteMessage = async (req: Request, res: Response): Promise<void> 
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
   }
-}; 
+};
