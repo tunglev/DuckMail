@@ -11,10 +11,26 @@ interface PopupProps {
   onClose: () => void;
 }
 
-function Popup({ open, onClose }: PopupProps) {
+function ComposePopup({ open, onClose }: PopupProps) {
   if (!open) return null;
 
+  // const validateEmail = (email: string) => {
+  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // };
+
   const composeNotification = () => {
+    // const newErrors = {
+    //   recipient: !validateEmail(recipient),
+    //   subject: subject.trim().length < 1,
+    //   notificationType: notificationType === '',
+    //   priority: priority === '',
+    //   message: message.trim().length < 1,
+    // };
+    // setErrors(newErrors);
+
+    // const hasErrors = Object.values(newErrors).some(Boolean);
+    // if (hasErrors) return;
+
     toaster.create({
       description: "Notification Composed Successfully!",
       type: "success",
@@ -54,7 +70,7 @@ function Popup({ open, onClose }: PopupProps) {
             <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
               Recipient:
             </Text>
-            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter recipient here" w="100%" />
+            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter recipient email here" w="100%" />
           </Box>
 
           {/* Subject Input */}
@@ -134,4 +150,4 @@ function Popup({ open, onClose }: PopupProps) {
   );
 }
 
-export default Popup;
+export default ComposePopup;

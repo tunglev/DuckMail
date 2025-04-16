@@ -13,14 +13,22 @@ import CommentsIcon from './assets/icons/Comments.svg';
 import DropdownIcon from './assets/icons/Dropdown.svg';
 import UpdownIcon from './assets/icons/Updown.svg';
 
-import Popup from './components/popup.tsx';
+import ComposePopup from './components/composepopup.tsx';
+import LoginSignup from './components/loginsignup.tsx';
 
 function App() {
-  const [open, setOpen] = useState(false);
+  const [composeOpen, setComposeOpen] = useState(false);
+  const [loginSignupOpen, setLoginSignupOpen] = useState(true);
   const [filterState, setFilterState] = useState('All');
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const handleComposeClose = () => setComposeOpen(false);
+  const handleComposeOpen = () => setComposeOpen(true);
+
+  const handleLoginSignupClose = () => setLoginSignupOpen(false);
+
+  const handleLogout = () => {
+    setLoginSignupOpen(true);
+  };
 
   const notificationData = [
     {
@@ -97,7 +105,7 @@ function App() {
       p="20px"
       // bg="gray.800" // Optional: background color
     >
-      <Heading fontFamily="Poppins" fontWeight="700" color="white" fontSize="32px">
+      <Heading fontFamily="Poppins" fontWeight="700" color="white" fontSize="32px" zIndex={6}>
         Duck{' '}
         <Text as="span" color="#B2A5FF">
           Mail
@@ -105,8 +113,11 @@ function App() {
       </Heading>
 
       <Flex gap="10px">
-        <Button onClick={handleOpen} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+        <Button onClick={handleComposeOpen} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
           Compose
+        </Button>
+        <Button onClick={handleLogout} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+          Logout
         </Button>
       </Flex>
     </Flex>
@@ -256,7 +267,8 @@ function App() {
       </Box>
 
       <Toaster />
-      <Popup open={open} toaster={toaster} onClose={handleClose} />
+      <ComposePopup open={composeOpen} toaster={toaster} onClose={handleComposeClose} />
+      <LoginSignup open={loginSignupOpen} toaster={toaster} onClose={handleLoginSignupClose} />
 
     </Flex>
 

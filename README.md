@@ -12,7 +12,7 @@ Insurance software platforms often have fragmented notification systems, leading
 
 The core features of this system are centered around delivering a **centralized**, **secure**, and **extensible notification experience**. The MVP was developed with five primary goals:
 
-1. **Centralized Read**: A unified inbox interface aggregates all notifications—including email and in-app messages—allowing users to view all relevant communications in one place.
+1. **Centralized Read**: A unified inbox interface aggregates all notifications—including email and in-app messages allowing users to view all relevant communications in one place.
 2. **Send Notifications**: Users and systems can send both in-app and email notifications via a simplified interface and standardized API endpoints.
 3. **Reply**: The platform supports bidirectional communication, enabling users to generate new notifications directly from the inbox view.
 4. **Data Management**: DuckMail's backend stores and manages multiple types of notifications.
