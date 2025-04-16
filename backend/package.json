@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
+    "rename-collection": "ts-node src/renameCollection.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
