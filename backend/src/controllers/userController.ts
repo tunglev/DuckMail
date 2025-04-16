@@ -31,9 +31,9 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 // Create a new user
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, username, firstName, lastName } = req.body;
+    const { email, username, firstName, lastName, password } = req.body;
     
-    if (!email || !username || !firstName || !lastName) {
+    if (!email || !username || !firstName || !lastName || !password) {
       res.status(400).json({ success: false, error: 'Please provide all required fields' });
       return;
     }
@@ -52,7 +52,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
       return;
     }
     
-    const newUser = await User.create({ email, username, firstName, lastName });
+    const newUser = await User.create({ email, username, firstName, lastName, password });
     res.status(201).json({ success: true, data: newUser });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
@@ -115,4 +115,4 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
   }
-}; 
+};

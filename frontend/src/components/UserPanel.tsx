@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
 import { User, userApi } from '../services/api';
 
@@ -183,71 +184,6 @@ const UserPanel = () => {
                   ))}
                 </div>
               )}
-            </div>
-
-            <div className="section">
-              <h3>{selectedUser ? 'Update User' : 'Create User'}</h3>
-              <form onSubmit={selectedUser ? handleUpdateUser : handleCreateUser}>
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <button type="submit" className="button" disabled={loading}>
-                    {selectedUser ? 'Update User' : 'Create User'}
-                  </button>
-                  {selectedUser && (
-                    <button
-                      type="button"
-                      className="button"
-                      onClick={resetForm}
-                      style={{ marginLeft: '10px' }}
-                    >
-                      Cancel
-                    </button>
-                  )}
-                </div>
-              </form>
             </div>
           </>
         )}

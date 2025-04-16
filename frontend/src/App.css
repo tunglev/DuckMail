@@ -49,6 +49,30 @@ header h1 {
   letter-spacing: -0.5px;
 }
 
+/* Header content with flex layout for user info */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* User info styling */
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.welcome-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-button {
+  margin-left: 10px;
+}
+
 /* Tab navigation */
 .tabs {
   display: flex;
@@ -248,4 +272,60 @@ header h1 {
   padding: 0.75rem;
   border-radius: var(--radius);
   background-color: rgba(46, 204, 113, 0.1);
+}
+
+/* Auth Panel Styling */
+.auth-modal {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--bg-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.auth-tabs button {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 2px solid transparent;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.auth-tabs button:hover {
+  color: var(--text-color);
+}
+
+.auth-tabs button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.auth-panel {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.user-greeting {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.user-greeting h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
