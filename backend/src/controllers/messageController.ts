@@ -22,21 +22,21 @@ export const getMessagesByRecipient = async (req: Request, res: Response): Promi
   }
 };
 
-// Get messages by username (either as sender or recipient)
-export const getMessagesByUsername = async (req: Request, res: Response): Promise<void> => {
+// Get messages by email (either as sender or recipient)
+export const getMessagesByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username } = req.params;
+    const { email } = req.params;
     
-    if (!username) {
-      res.status(400).json({ success: false, error: 'Username is required' });
+    if (!email) {
+      res.status(400).json({ success: false, error: 'Email is required' });
       return;
     }
     
-    // Find messages where the user is either the sender or recipient
+    // Find messages where the user's email is either the sender or recipient
     const messages = await Message.find({
       $or: [
-        { sender: username },
-        { recipient: username }
+        { sender: email },
+        { recipient: email }
       ]
     });
     

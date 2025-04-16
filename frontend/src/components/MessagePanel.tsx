@@ -48,8 +48,8 @@ const MessagePanel = ({ currentUser }: MessagePanelProps = {}) => {
         return;
       }
       
-      // Use the new endpoint to fetch user's messages
-      const data = await messageApi.getByRecipient(user.email);
+      // Use email instead of username to fetch messages
+      const data = await messageApi.getUserMessages(user.email);
       setMessages(Array.isArray(data) ? data : []);
     } catch (err) {
       setError('Failed to fetch messages: ' + (err instanceof Error ? err.message : String(err)));
@@ -142,7 +142,7 @@ const MessagePanel = ({ currentUser }: MessagePanelProps = {}) => {
       // Force set sender to current user's username
       const messageToSend = {
         ...formData,
-        sender: user.username
+        sender: user.email
       };
       
       const newMessage = await messageApi.create(messageToSend);
