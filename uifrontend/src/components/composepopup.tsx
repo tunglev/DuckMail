@@ -1,5 +1,6 @@
 // Popup.tsx
 import { Box, Button, Flex, Input, Text, Textarea } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { Select as ChakraSelect } from '@chakra-ui/select';
 import { toaster } from "@/components/ui/toaster";
 
@@ -7,34 +8,72 @@ import CloseIcon from '../assets/icons/Close.svg';
 
 interface PopupProps {
   open: boolean;
-  toaster: any;
   onClose: () => void;
+  buttonsData: any;
+  setButtonsData: any;
 }
 
-function ComposePopup({ open, onClose }: PopupProps) {
+function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps) {
+  const recipientRef = useRef<HTMLInputElement>(null);
+  const subjectRef = useRef<HTMLInputElement>(null);
+  const typeRef = useRef<HTMLSelectElement>(null);
+  const priorityRef = useRef<HTMLSelectElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
   if (!open) return null;
 
-  // const validateEmail = (email: string) => {
-  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  // };
-
   const composeNotification = () => {
-    // const newErrors = {
-    //   recipient: !validateEmail(recipient),
-    //   subject: subject.trim().length < 1,
-    //   notificationType: notificationType === '',
-    //   priority: priority === '',
-    //   message: message.trim().length < 1,
-    // };
-    // setErrors(newErrors);
+    if(!recipientRef.current || !subjectRef.current || !typeRef.current || !priorityRef.current || !messageRef.current){
+      return;
+    }
 
-    // const hasErrors = Object.values(newErrors).some(Boolean);
-    // if (hasErrors) return;
+    let isError = false;
+
+    if (recipientRef.current.value.trim().length === 0 || !recipientRef.current.value.trim().includes('@')) {
+      isError = true;
+    }
+
+    if (subjectRef.current.value.trim().length === 0) {
+      isError = true;
+    }
+
+    if (typeRef.current.value.trim().length === 0) {
+      isError = true;
+    }
+
+    if (priorityRef.current.value.trim().length === 0) {
+      isError = true;
+    }
+
+    if (messageRef.current.value.trim().length === 0) {
+      isError = true;
+    }
+
+    if(isError){
+      toaster.create({
+        description: "Invalid Input :(",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    const currData = buttonsData;
+    currData.push({
+      receipient: recipientRef.current.value,
+      type: typeRef.current.value,
+      priority: priorityRef.current.value,
+      subject: subjectRef.current.value,
+      text: messageRef.current.value,
+      active: false
+    });
+
+    setButtonsData(currData);
 
     toaster.create({
       description: "Notification Composed Successfully!",
       type: "success",
-      duration: 5000,
+      duration: 3000,
     });
     onClose();
   };
@@ -70,7 +109,7 @@ function ComposePopup({ open, onClose }: PopupProps) {
             <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
               Recipient:
             </Text>
-            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter recipient email here" w="100%" />
+            <Input ref={recipientRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter recipient email here" w="100%" />
           </Box>
 
           {/* Subject Input */}
@@ -78,13 +117,14 @@ function ComposePopup({ open, onClose }: PopupProps) {
             <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
               Subject:
             </Text>
-            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" />
+            <Input ref={subjectRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" />
           </Box>
 
           {/* Notification Type Select */}
           <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
             <Text as="span" paddingRight="10px" fontWeight="600" fontSize="14px" color="#B2A5FF">Notification&nbsp;Type:</Text>
             <ChakraSelect
+              ref={typeRef}
               border="0px"
               color="#CAC6C6"
               focusBorderColor="transparent"
@@ -109,12 +149,13 @@ function ComposePopup({ open, onClose }: PopupProps) {
               Priority:
             </Text>
             <ChakraSelect
+              ref={priorityRef}
               border="0px"
               color="#CAC6C6"
               focusBorderColor="transparent"
               _focus={{ boxShadow: 'none' }}
               bg="#45444D"
-              placeholder="Select Type"
+              placeholder="Select Priority"
               w="100%"
               _hover={{ bg: "#383737" }}
               _expanded={{ bg: "#383737" }}
@@ -136,7 +177,7 @@ function ComposePopup({ open, onClose }: PopupProps) {
               <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
                 Message:
               </Text>
-              <Textarea p="0px" border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" h="100%" />
+              <Textarea ref={messageRef} p="0px" border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" h="100%" />
             </Flex>
           </Box>
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import './App.css';
 
 import { Heading, Text, Box, Button, Flex } from "@chakra-ui/react";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/toaster";
 // import SettingsIcon from './assets/icons/SettingsButton.svg';
 import ClockIcon from './assets/icons/Clock.svg';
 import GridIcon from './assets/icons/Grid.svg';
@@ -27,11 +27,13 @@ function App() {
   const handleLoginSignupClose = () => setLoginSignupOpen(false);
 
   const handleLogout = () => {
+    // CLEAR BASE64 COOKIE OF USER
     setLoginSignupOpen(true);
   };
 
   const notificationData = [
     {
+      recipient: 'Test',
       type: 'Policy',
       priority: 'High',
       subject: 'Important Update Regarding Policy #5585-2274',
@@ -39,6 +41,7 @@ function App() {
       active: false
     },
     {
+      recipient: 'Test',
       type: 'News',
       priority: 'Low',
       subject: 'Breaking News about Policies',
@@ -46,6 +49,7 @@ function App() {
       active: false
     },
     {
+      recipient: 'Test',
       type: 'Claim',
       priority: 'Medium',
       subject: 'New Claim Filed',
@@ -53,6 +57,7 @@ function App() {
       active: false
     },
     {
+      recipient: 'Test',
       type: 'Policy',
       priority: 'High',
       subject: 'New Policy Update #5585-2280',
@@ -60,6 +65,7 @@ function App() {
       active: false
     },
     {
+      recipient: 'Test',
       type: 'News',
       priority: 'High',
       subject: 'Latest Updates on Claims',
@@ -67,6 +73,7 @@ function App() {
       active: false
     },
     {
+      recipient: 'Test',
       type: 'Claim',
       priority: 'Low',
       subject: 'Claim Status Updated',
@@ -255,7 +262,7 @@ function App() {
 
             {button.active && (
               <Text color="white" wordBreak="break-word" whiteSpace="normal">
-                <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">Message: </Text><Text as="span" fontWeight="500" fontSize="13px">Lorem ipsum odor amet, consectetuer adipiscing elit. Cras aliquet posuere metus; mattis tempor venenatis sociosqu cras sit. Est hendrerit libero ipsum libero ridiculus tristique nullam nascetur adipiscing.</Text>
+                <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">Message: </Text><Text as="span" fontWeight="500" fontSize="13px">{button.text}</Text>
               </Text>
             )}
             </Flex>
@@ -267,8 +274,8 @@ function App() {
       </Box>
 
       <Toaster />
-      <ComposePopup open={composeOpen} toaster={toaster} onClose={handleComposeClose} />
-      <LoginSignup open={loginSignupOpen} toaster={toaster} onClose={handleLoginSignupClose} />
+      <ComposePopup open={composeOpen} onClose={handleComposeClose} buttonsData={buttonsData} setButtonsData={setButtonsData} />
+      <LoginSignup open={loginSignupOpen} onClose={handleLoginSignupClose} />
 
     </Flex>
 

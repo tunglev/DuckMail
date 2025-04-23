@@ -1,37 +1,63 @@
 // Popup.tsx
-import { Box, Button, Flex, Input, Text, Textarea, Heading } from '@chakra-ui/react';
-import { Select as ChakraSelect } from '@chakra-ui/select';
+import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { toaster } from "@/components/ui/toaster";
-
-import CloseIcon from '../assets/icons/Close.svg';
 
 interface PopupProps {
   open: boolean;
-  toaster: any;
   onClose: () => void;
 }
 
 function LoginSignup({ open, onClose }: PopupProps) {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   if (!open) return null;
 
-  // const validateEmail = (email: string) => {
-  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  // };
-
   const handleLogin = () => {
+    if(!emailRef.current || !passwordRef.current){
+      return;
+    }
+
+    // CHECK TO SEE IF PASSWORD MATCHES EMAIL
+
     toaster.create({
       description: "Login Successful!",
       type: "success",
-      duration: 5000,
+      duration: 3000,
     });
     onClose();
   };
 
   const handleSignup = () => {
+    if(!emailRef.current || !passwordRef.current){
+      return;
+    }
+
+    if (emailRef.current.value.trim().length === 0 || !emailRef.current.value.trim().includes('@')) {
+      toaster.create({
+        description: "Invalid Email",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (passwordRef.current.value.trim().length < 12) {
+      toaster.create({
+        description: "Length Of Password Less Than 12",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // CREATE USER CODE HERE AFTER HASHING PASSWORD
+
     toaster.create({
       description: "Signup Successful!",
       type: "success",
-      duration: 5000,
+      duration: 3000,
     });
     onClose();
   };
@@ -64,7 +90,7 @@ function LoginSignup({ open, onClose }: PopupProps) {
             Email:
           </Text>
           <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter email here" w="100%" />
+            <Input ref={emailRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter email here" w="100%" />
           </Box>
 
           {/* Password Input */}
@@ -72,7 +98,7 @@ function LoginSignup({ open, onClose }: PopupProps) {
               Password:
           </Text>
           <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Input border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter password here" w="100%" />
+            <Input ref={passwordRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter password here" w="100%" />
           </Box>
 
           {/* Login and Signup Buttons */}
