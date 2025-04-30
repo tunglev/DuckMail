@@ -2,14 +2,15 @@
 import { Box, Button, Flex, Input, Text, Link } from '@chakra-ui/react';
 import { useRef, useState } from 'react'; // Import useState
 import { toaster } from "@/components/ui/toaster";
-import { authApi } from '../services/api'; // Import the authApi
+import { authApi, AuthUser } from '../services/api'; // Import AuthUser type
 
 interface PopupProps {
   open: boolean;
   onClose: () => void;
+  onLoginSuccess: (user: AuthUser) => void; // Add callback for successful login
 }
 
-function LoginSignup({ open, onClose }: PopupProps) {
+function LoginSignup({ open, onClose, onLoginSuccess }: PopupProps) { // Destructure onLoginSuccess
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const firstNameRef = useRef<HTMLInputElement>(null); // Add ref for First Name
@@ -50,7 +51,8 @@ function LoginSignup({ open, onClose }: PopupProps) {
         type: "success",
         duration: 3000,
       });
-      onClose(); // Close popup on successful login
+      onLoginSuccess(user); // Call the success callback with user data
+      // onClose(); // onClose will be called by the parent component now
     } catch (err: any) {
       console.error("Login failed:", err);
       toaster.create({

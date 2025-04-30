@@ -1,5 +1,5 @@
 // Popup.tsx
-import { Box, Button, Flex, Input, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Text, Textarea, IconButton } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { Select as ChakraSelect } from '@chakra-ui/select';
 import { toaster } from "@/components/ui/toaster";
@@ -80,113 +80,179 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps
 
   return (
     <>
-      <Box position="absolute" w="100%" h="110%" bg="#212026" opacity="0.4" zIndex={8} />
-
+      {/* Background Overlay - Use fixed positioning and higher zIndex */}
       <Box
-        position="absolute"
-        w="70vh"
-        h="60vh"
-        bg="#322F3E"
-        zIndex={10}
-        p={8}
-        mb={50}
+        position="fixed"
+        top="0"
+        left="0"
+        w="100%"
+        h="100%"
+        bg="blackAlpha.600" // Consistent overlay style
+        zIndex={1000} // Higher zIndex
+        onClick={onClose} // Allow closing by clicking overlay
+      />
+
+      {/* Popup Box - Use fixed positioning, centering, and higher zIndex */}
+      <Flex
+        position="fixed"
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        w="90%" // Responsive width
+        maxW="600px" // Max width, adjust as needed
+        // minH="400px" // Adjust height as needed or let content define it
+        bg="#282730" // Match UserProfilePopup background
+        zIndex={1001} // Higher zIndex
+        p={6} // Consistent padding
         borderRadius="10px"
+        direction="column"
+        boxShadow="lg"
       >
         {/* Top Row: Text and Close Button */}
         <Flex justify="space-between" align="center" mb={6}>
-          <Text mb="10px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="22px">
+          <Text fontFamily="Poppins" fontWeight="700" color="white" fontSize="24px">
             Compose
           </Text>
-          <Button mb="10px" size="0px" onClick={onClose} bg="#B2A5FF" variant="solid">
-            <img src={CloseIcon} alt="Icon" />
-          </Button>
+          {/* Use IconButton for consistency */}
+          <IconButton
+            aria-label="Close compose"
+            icon={<img src={CloseIcon} alt="Close" />}
+            onClick={onClose}
+            size="sm"
+            variant="ghost"
+            colorScheme="purple"
+            _hover={{ bg: "#45444D" }}
+          />
         </Flex>
 
-        {/* Centered Form */}
-        <Flex direction="column" align="center" gap={4}>
+        {/* Form Content */}
+        <Flex direction="column" gap={4} flexGrow={1}>
           {/* Recipient Input */}
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
+          <Box>
+            <Text as="label" htmlFor="recipient" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
               Recipient:
             </Text>
-            <Input ref={recipientRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter recipient email here" w="100%" />
+            <Input
+              id="recipient"
+              ref={recipientRef}
+              border="0px"
+              bg="#45444D"
+              color="#CAC6C6"
+              _focus={{ borderColor: "#B2A5FF" }}
+              placeholder="Enter recipient email here"
+              w="100%"
+              borderRadius="8px"
+              p="12px"
+              _placeholder={{ color: "#888" }}
+            />
           </Box>
 
           {/* Subject Input */}
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
+          <Box>
+            <Text as="label" htmlFor="subject" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
               Subject:
             </Text>
-            <Input ref={subjectRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" />
+            <Input
+              id="subject"
+              ref={subjectRef}
+              border="0px"
+              bg="#45444D"
+              color="#CAC6C6"
+              _focus={{ borderColor: "#B2A5FF" }}
+              placeholder="Enter subject here"
+              w="100%"
+              borderRadius="8px"
+              p="12px"
+              _placeholder={{ color: "#888" }}
+            />
           </Box>
 
-          {/* Notification Type Select */}
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Text as="span" paddingRight="10px" fontWeight="600" fontSize="14px" color="#B2A5FF">Notification&nbsp;Type:</Text>
-            <ChakraSelect
-              ref={typeRef}
-              border="0px"
-              color="#CAC6C6"
-              focusBorderColor="transparent"
-              _focus={{ boxShadow: 'none' }}
-              bg="#45444D"
-              placeholder="Select Type"
-              w="100%"
-              _hover={{ bg: "#383737" }}
-              _expanded={{ bg: "#383737" }}
-              icon={<></>}
-              style={{
-                WebkitAppearance: 'none',
-                MozAppearance: 'none',
-              }}
-            >
-              <option value="Policy">Policy</option>
-              <option value="News">News</option>
-              <option value="Claim">Claim</option>
-            </ChakraSelect>
-
-            <Text as="span" paddingRight="10px" fontWeight="600" fontSize="14px" color="#B2A5FF">
-              Priority:
-            </Text>
-            <ChakraSelect
-              ref={priorityRef}
-              border="0px"
-              color="#CAC6C6"
-              focusBorderColor="transparent"
-              _focus={{ boxShadow: 'none' }}
-              bg="#45444D"
-              placeholder="Select Priority"
-              w="100%"
-              _hover={{ bg: "#383737" }}
-              _expanded={{ bg: "#383737" }}
-              icon={<></>}
-              style={{
-                WebkitAppearance: 'none',
-                MozAppearance: 'none',
-              }}
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </ChakraSelect>
-          </Box>
+          {/* Type and Priority Row */}
+          <Flex gap={4} direction={{ base: 'column', sm: 'row' }}>
+            <Box flex={1}>
+              <Text as="label" htmlFor="type" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+                Type:
+              </Text>
+              <ChakraSelect
+                id="type"
+                ref={typeRef}
+                border="0px"
+                bg="#45444D"
+                color="#CAC6C6"
+                _focus={{ borderColor: "#B2A5FF" }}
+                placeholder="Select Type"
+                w="100%"
+                borderRadius="8px"
+                // p="12px" // Select padding is handled differently
+                iconColor="#B2A5FF"
+              >
+                <option style={{ backgroundColor: '#45444D' }} value="Policy">Policy</option>
+                <option style={{ backgroundColor: '#45444D' }} value="News">News</option>
+                <option style={{ backgroundColor: '#45444D' }} value="Claim">Claim</option>
+              </ChakraSelect>
+            </Box>
+            <Box flex={1}>
+              <Text as="label" htmlFor="priority" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+                Priority:
+              </Text>
+              <ChakraSelect
+                id="priority"
+                ref={priorityRef}
+                border="0px"
+                bg="#45444D"
+                color="#CAC6C6"
+                _focus={{ borderColor: "#B2A5FF" }}
+                placeholder="Select Priority"
+                w="100%"
+                borderRadius="8px"
+                iconColor="#B2A5FF"
+              >
+                <option style={{ backgroundColor: '#45444D' }} value="Low">Low</option>
+                <option style={{ backgroundColor: '#45444D' }} value="Medium">Medium</option>
+                <option style={{ backgroundColor: '#45444D' }} value="High">High</option>
+              </ChakraSelect>
+            </Box>
+          </Flex>
 
           {/* Message Textarea */}
-          <Box display="flex" alignItems="top" justifyContent="space-between" width="100%" height="17vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Flex direction="column" align="left" gap={0} w="100%">
-              <Text as="span" fontWeight="600" fontSize="14px" color="#B2A5FF">
-                Message:
-              </Text>
-              <Textarea ref={messageRef} p="0px" border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter subject here" w="100%" h="100%" />
-            </Flex>
+          <Box>
+            <Text as="label" htmlFor="message" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+              Message:
+            </Text>
+            <Textarea
+              id="message"
+              ref={messageRef}
+              border="0px"
+              bg="#45444D"
+              color="#CAC6C6"
+              _focus={{ borderColor: "#B2A5FF" }}
+              placeholder="Enter message here"
+              w="100%"
+              borderRadius="8px"
+              p="12px"
+              minH="100px" // Give textarea a minimum height
+              _placeholder={{ color: "#888" }}
+            />
           </Box>
 
           {/* Submit Button */}
-          <Button onClick={composeNotification} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+          <Button
+            mt={4}
+            onClick={composeNotification}
+            fontFamily="Poppins"
+            fontWeight="600"
+            color="white"
+            bg="#B2A5FF"
+            variant="solid"
+            fontSize="16px"
+            _hover={{ bg: "#9d8bff" }}
+            w="100%"
+            size="lg"
+          >
             Compose
           </Button>
         </Flex>
-      </Box>
+      </Flex>
     </>
   );
 }
