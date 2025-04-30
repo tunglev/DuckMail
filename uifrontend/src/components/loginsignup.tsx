@@ -2,6 +2,7 @@
 import { Box, Button, Flex, Input, Text, Link } from '@chakra-ui/react';
 import { useRef, useState } from 'react'; // Import useState
 import { toaster } from "@/components/ui/toaster";
+import { authApi } from '../services/api'; // Import the authApi
 
 interface PopupProps {
   open: boolean;
@@ -13,41 +14,61 @@ function LoginSignup({ open, onClose }: PopupProps) {
   const passwordRef = useRef<HTMLInputElement>(null);
   const firstNameRef = useRef<HTMLInputElement>(null); // Add ref for First Name
   const lastNameRef = useRef<HTMLInputElement>(null);  // Add ref for Last Name
+  const usernameRef = useRef<HTMLInputElement>(null); // Add ref for Username
   const [isLoginView, setIsLoginView] = useState(true); // State to toggle views
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   if (!open) return null;
 
-  const handleLogin = () => {
-    if (!emailRef.current || !passwordRef.current) {
+  const handleLogin = async () => { // Make async
+    // Use usernameRef for login view now
+    if (!usernameRef.current || !passwordRef.current) {
       return;
     }
 
-    const email = emailRef.current.value.trim();
+    // Use usernameRef value for login
+    const username = usernameRef.current.value.trim();
     const password = passwordRef.current.value.trim();
 
-    if (!email || !password) {
+    if (!username || !password) {
        toaster.create({
-        description: "Email and Password cannot be empty.",
+        description: "Username and Password cannot be empty.", // Updated message
         type: "error",
         duration: 3000,
       });
       return;
     }
 
-    // TODO: CHECK TO SEE IF PASSWORD MATCHES EMAIL (API Call)
-    console.log("Logging in with:", email, password);
+    setIsLoading(true); // Set loading true
 
-
-    toaster.create({
-      description: "Login Successful!",
-      type: "success",
-      duration: 3000,
-    });
-    onClose(); // Close popup on successful login
+    try {
+      // Send username from usernameRef
+      const user = await authApi.login({ username: username, password });
+      console.log("Logged in user:", user); // Log user data on success
+      toaster.create({
+        description: "Login Successful!",
+        type: "success",
+        duration: 3000,
+      });
+      onClose(); // Close popup on successful login
+    } catch (err: any) {
+      console.error("Login failed:", err);
+      toaster.create({
+        // Slightly more specific error hint
+        description: err.message === 'Invalid credentials'
+          ? "Login failed. Please check your username and password."
+          : err.message || "Login failed. An unknown error occurred.",
+        type: "error",
+        duration: 5000, // Longer duration for errors
+      });
+    } finally {
+      setIsLoading(false); // Set loading false
+    }
   };
 
-  const handleSignup = () => {
-    if (!emailRef.current || !passwordRef.current || !firstNameRef.current || !lastNameRef.current) {
+  const handleSignup = async () => { // Make async
+    // Use emailRef for signup view
+    if (!emailRef.current || !passwordRef.current || !firstNameRef.current || !lastNameRef.current || !usernameRef.current) {
       return;
     }
 
@@ -55,15 +76,26 @@ function LoginSignup({ open, onClose }: PopupProps) {
     const password = passwordRef.current.value.trim();
     const firstName = firstNameRef.current.value.trim(); // Get first name
     const lastName = lastNameRef.current.value.trim();   // Get last name
+    const username = usernameRef.current.value.trim(); // Get username
 
-    if (!firstName || !lastName) { // Validate names
+    // ... existing signup validation ...
+    if (!firstName || !lastName || !username) { // Validate username too
       toaster.create({
-        description: "First Name and Last Name cannot be empty.",
+        description: "First Name, Last Name, and Username cannot be empty.",
         type: "error",
         duration: 3000,
       });
       return;
     }
+
+     if (username.length < 3) { // Example username validation
+        toaster.create({
+            description: "Username must be at least 3 characters long.",
+            type: "error",
+            duration: 3000,
+        });
+        return;
+     }
 
     if (email.length === 0 || !email.includes('@')) {
       toaster.create({
@@ -82,17 +114,31 @@ function LoginSignup({ open, onClose }: PopupProps) {
       });
       return;
     }
+    // ... end existing signup validation ...
 
-    // TODO: CREATE USER CODE HERE AFTER HASHING PASSWORD (API Call)
-    console.log("Signing up with:", firstName, lastName, email, password); // Include names in log
+    setIsLoading(true); // Set loading true
 
-    toaster.create({
-      description: "Signup Successful! Please log in.",
-      type: "success",
-      duration: 3000,
-    });
-    setIsLoginView(true); // Switch to login view after successful signup
-    // Do not close popup, let user log in. If auto-login is desired, call onClose() here.
+    try {
+      // Call the register API - username comes from usernameRef here too
+      await authApi.register({ username, email, firstName, lastName, password });
+      console.log("Signing up with:", firstName, lastName, username, email, password);
+
+      toaster.create({
+        description: "Signup Successful! Please log in.",
+        type: "success",
+        duration: 3000,
+      });
+      setIsLoginView(true); // Switch to login view after successful signup
+    } catch (err: any) {
+      console.error("Signup failed:", err);
+      toaster.create({
+        description: err.message || "Signup failed. Please try again.",
+        type: "error",
+        duration: 5000,
+      });
+    } finally {
+      setIsLoading(false); // Set loading false
+    }
   };
 
   const handleSubmit = () => {
@@ -177,30 +223,56 @@ function LoginSignup({ open, onClose }: PopupProps) {
             </Box>
           )}
 
-          {/* Email Input */}
-          <Box>
-            <Text as="label" htmlFor="email" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
-              Email:
-            </Text>
-            <Input
-              id="email"
-              ref={emailRef}
-              type="email" // Use email type for better validation/mobile keyboards
-              border="0px"
-              bg="#45444D"
-              color="#CAC6C6"
-              _focus={{ borderColor: "#B2A5FF" }} // Use _focus for focus styles
-              placeholder="Enter email here"
-              w="100%"
-              borderRadius="8px"
-              p="12px"
-              _placeholder={{ color: "#888" }} // Style placeholder
-            />
-          </Box>
+           {/* Username Input (Used in BOTH Sign Up and Login views) */}
+           {/* Always show username field now */}
+            <Box>
+              <Text as="label" htmlFor="username" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+                Username: {/* Label is always Username */}
+              </Text>
+              <Input
+                id="username"
+                ref={usernameRef} // Use usernameRef for both login and signup username
+                border="0px"
+                bg="#45444D"
+                color="#CAC6C6"
+                _focus={{ borderColor: "#B2A5FF" }}
+                placeholder={isLoginView ? "Enter your username" : "Choose a username"} // Placeholder changes
+                w="100%"
+                borderRadius="8px"
+                p="12px"
+                _placeholder={{ color: "#888" }}
+              />
+               {!isLoginView && ( // Show hint only in signup
+                 <Text fontSize="xs" color="gray.400" mt={1}>Minimum 3 characters</Text>
+               )}
+            </Box>
+
+          {/* Email Input (Only in Sign Up view) */}
+          {!isLoginView && (
+            <Box>
+              <Text as="label" htmlFor="email" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+                Email: {/* Label is always Email */}
+              </Text>
+              <Input
+                id="email"
+                ref={emailRef} // Use emailRef only for signup email
+                type={"email"} // Always email type
+                border="0px"
+                bg="#45444D"
+                color="#CAC6C6"
+                _focus={{ borderColor: "#B2A5FF" }}
+                placeholder={"Enter email here"} // Placeholder is always for email
+                w="100%"
+                borderRadius="8px"
+                p="12px"
+                _placeholder={{ color: "#888" }}
+              />
+            </Box>
+          )}
 
           {/* Password Input */}
           <Box>
-            <Text as="label" htmlFor="password" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+             <Text as="label" htmlFor="password" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
               Password:
             </Text>
             <Input
@@ -227,6 +299,8 @@ function LoginSignup({ open, onClose }: PopupProps) {
             mt={4} // Add margin top for spacing
             size={'lg'} // Consistent button size
             onClick={handleSubmit}
+            isLoading={isLoading} // Add isLoading prop
+            disabled={isLoading} // Disable button when loading
             fontFamily="Poppins"
             fontWeight="600"
             color="white"
@@ -236,7 +310,7 @@ function LoginSignup({ open, onClose }: PopupProps) {
             _hover={{ bg: "#9d8bff" }} // Add hover effect
             w="100%" // Make button full width
           >
-            {isLoginView ? 'Login' : 'Sign Up'}
+            {isLoading ? 'Processing...' : (isLoginView ? 'Login' : 'Sign Up')} {/* Show loading text */}
           </Button>
 
           {/* Switch View Link */}
