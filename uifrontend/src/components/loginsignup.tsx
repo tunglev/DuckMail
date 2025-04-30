@@ -1,6 +1,6 @@
 // Popup.tsx
-import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { Box, Button, Flex, Input, Text, Link } from '@chakra-ui/react';
+import { useRef, useState } from 'react'; // Import useState
 import { toaster } from "@/components/ui/toaster";
 
 interface PopupProps {
@@ -11,107 +11,195 @@ interface PopupProps {
 function LoginSignup({ open, onClose }: PopupProps) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [isLoginView, setIsLoginView] = useState(true); // State to toggle views
 
   if (!open) return null;
 
   const handleLogin = () => {
-    if(!emailRef.current || !passwordRef.current){
+    if (!emailRef.current || !passwordRef.current) {
       return;
     }
 
-    // CHECK TO SEE IF PASSWORD MATCHES EMAIL
+    const email = emailRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
+
+    if (!email || !password) {
+       toaster.create({
+        description: "Email and Password cannot be empty.",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // TODO: CHECK TO SEE IF PASSWORD MATCHES EMAIL (API Call)
+    console.log("Logging in with:", email, password);
+
 
     toaster.create({
       description: "Login Successful!",
       type: "success",
       duration: 3000,
     });
-    onClose();
+    onClose(); // Close popup on successful login
   };
 
   const handleSignup = () => {
-    if(!emailRef.current || !passwordRef.current){
+    if (!emailRef.current || !passwordRef.current) {
       return;
     }
 
-    if (emailRef.current.value.trim().length === 0 || !emailRef.current.value.trim().includes('@')) {
+    const email = emailRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
+
+
+    if (email.length === 0 || !email.includes('@')) {
       toaster.create({
-        description: "Invalid Email",
+        description: "Invalid Email format.",
         type: "error",
         duration: 3000,
       });
       return;
     }
 
-    if (passwordRef.current.value.trim().length < 12) {
+    if (password.length < 12) {
       toaster.create({
-        description: "Length Of Password Less Than 12",
+        description: "Password must be at least 12 characters long.",
         type: "error",
         duration: 3000,
       });
       return;
     }
 
-    // CREATE USER CODE HERE AFTER HASHING PASSWORD
+    // TODO: CREATE USER CODE HERE AFTER HASHING PASSWORD (API Call)
+    console.log("Signing up with:", email, password);
+
 
     toaster.create({
-      description: "Signup Successful!",
+      description: "Signup Successful! Please log in.",
       type: "success",
       duration: 3000,
     });
-    onClose();
+    setIsLoginView(true); // Switch to login view after successful signup
+    // Do not close popup, let user log in. If auto-login is desired, call onClose() here.
+  };
+
+  const handleSubmit = () => {
+    if (isLoginView) {
+      handleLogin();
+    } else {
+      handleSignup();
+    }
   };
 
   return (
     <>
-      <Box position="absolute" w="100%" h="110%" bg="#1A191E" zIndex={4} />
+      {/* Background Overlay */}
+      <Box position="fixed" top="0" left="0" w="100%" h="100%" bg="blackAlpha.600" zIndex={1000} />
 
-      <Box
-        position="absolute"
-        w="68vh"
-        h="45vh"
+      {/* Popup Box */}
+      <Flex
+        position="fixed"
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        w="90%" // Responsive width
+        maxW="450px" // Max width for larger screens
+        // h="auto" // Auto height based on content
+        minH="300px" // Minimum height
         bg="#282730"
-        zIndex={10}
-        p={8}
-        mb={50}
+        zIndex={1001} // Ensure popup is above overlay
+        p={6} // Padding
         borderRadius="10px"
+        direction="column" // Stack elements vertically
+        boxShadow="lg" // Add shadow for depth
       >
-        {/* Top Row: Text */}
-        <Flex justify="space-between" align="center" mb={6}>
-          <Text mb="10px" fontFamily="Poppins" fontWeight="700" color="white" fontSize="24px">
-            Login <Text as={'a'} fontWeight="600" color="#B2A5FF">|</Text> Signup
+        {/* Top Row: Title */}
+        <Flex justify="center" align="center" mb={6}>
+          <Text fontFamily="Poppins" fontWeight="700" color="white" fontSize="24px">
+            {isLoginView ? 'Login' : 'Sign Up'}
           </Text>
         </Flex>
 
-        {/* Centered Form */}
-        <Flex mt={-3} direction="column" gap={4}>
+        {/* Form */}
+        <Flex direction="column" gap={4} flexGrow={1}>
           {/* Email Input */}
-          <Text as="span" mb={-4} textJustify="left" fontWeight="600" fontSize="16px" color="#B2A5FF">
-            Email:
-          </Text>
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Input ref={emailRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter email here" w="100%" />
+          <Box>
+            <Text as="label" htmlFor="email" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+              Email:
+            </Text>
+            <Input
+              id="email"
+              ref={emailRef}
+              type="email" // Use email type for better validation/mobile keyboards
+              border="0px"
+              bg="#45444D"
+              color="#CAC6C6"
+              _focus={{ borderColor: "#B2A5FF" }} // Use _focus for focus styles
+              placeholder="Enter email here"
+              w="100%"
+              borderRadius="8px"
+              p="12px"
+              _placeholder={{ color: "#888" }} // Style placeholder
+            />
           </Box>
 
           {/* Password Input */}
-          <Text as="span" mt={-1} mb={-4} fontWeight="600" fontSize="16px" color="#B2A5FF">
+          <Box>
+            <Text as="label" htmlFor="password" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
               Password:
-          </Text>
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="5vh" gap="0px" textAlign="left" fontFamily="Poppins" fontWeight="600" color="white" bg="#45444D" fontSize="14px" borderRadius="8px" p="12px">
-            <Input ref={passwordRef} border="0px" color="#CAC6C6" focusRingColor="transparent" placeholder="Enter password here" w="100%" />
+            </Text>
+            <Input
+              id="password"
+              ref={passwordRef}
+              type="password" // Use password type
+              border="0px"
+              bg="#45444D"
+              color="#CAC6C6"
+              _focus={{ borderColor: "#B2A5FF" }} // Use _focus for focus styles
+              placeholder="Enter password here"
+              w="100%"
+              borderRadius="8px"
+              p="12px"
+              _placeholder={{ color: "#888" }}
+            />
+             {!isLoginView && (
+               <Text fontSize="xs" color="gray.400" mt={1}>Minimum 12 characters</Text>
+             )}
           </Box>
 
-          {/* Login and Signup Buttons */}
-          <Flex justify="center" align="center" mt={8} gap={12}>
-            <Button size={'xl'} onClick={handleLogin} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
-              Login
-            </Button>
-            <Button size={'xl'} onClick={handleSignup} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
-              Signup
-            </Button>
+          {/* Submit Button */}
+          <Button
+            mt={4} // Add margin top for spacing
+            size={'lg'} // Consistent button size
+            onClick={handleSubmit}
+            fontFamily="Poppins"
+            fontWeight="600"
+            color="white"
+            bg="#B2A5FF"
+            variant="solid"
+            fontSize="16px"
+            _hover={{ bg: "#9d8bff" }} // Add hover effect
+            w="100%" // Make button full width
+          >
+            {isLoginView ? 'Login' : 'Sign Up'}
+          </Button>
+
+          {/* Switch View Link */}
+          <Text textAlign="center" mt={4}>
+            <Link
+              color="#B2A5FF"
+              fontWeight="600"
+              onClick={() => setIsLoginView(!isLoginView)}
+              _hover={{ textDecoration: 'underline' }} // Add underline on hover
+            >
+              {isLoginView ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+            </Link>
+          </Text>
         </Flex>
-        </Flex>
-      </Box>
+         {/* Optional: Add a close button if needed, though onClose is usually triggered by successful action or clicking overlay */}
+         {/* <Button position="absolute" top="10px" right="10px" onClick={onClose}>Close</Button> */}
+      </Flex>
     </>
   );
 }
