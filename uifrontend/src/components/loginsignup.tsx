@@ -11,6 +11,8 @@ interface PopupProps {
 function LoginSignup({ open, onClose }: PopupProps) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const firstNameRef = useRef<HTMLInputElement>(null); // Add ref for First Name
+  const lastNameRef = useRef<HTMLInputElement>(null);  // Add ref for Last Name
   const [isLoginView, setIsLoginView] = useState(true); // State to toggle views
 
   if (!open) return null;
@@ -45,13 +47,23 @@ function LoginSignup({ open, onClose }: PopupProps) {
   };
 
   const handleSignup = () => {
-    if (!emailRef.current || !passwordRef.current) {
+    if (!emailRef.current || !passwordRef.current || !firstNameRef.current || !lastNameRef.current) {
       return;
     }
 
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value.trim();
+    const firstName = firstNameRef.current.value.trim(); // Get first name
+    const lastName = lastNameRef.current.value.trim();   // Get last name
 
+    if (!firstName || !lastName) { // Validate names
+      toaster.create({
+        description: "First Name and Last Name cannot be empty.",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
 
     if (email.length === 0 || !email.includes('@')) {
       toaster.create({
@@ -72,8 +84,7 @@ function LoginSignup({ open, onClose }: PopupProps) {
     }
 
     // TODO: CREATE USER CODE HERE AFTER HASHING PASSWORD (API Call)
-    console.log("Signing up with:", email, password);
-
+    console.log("Signing up with:", firstName, lastName, email, password); // Include names in log
 
     toaster.create({
       description: "Signup Successful! Please log in.",
@@ -105,7 +116,6 @@ function LoginSignup({ open, onClose }: PopupProps) {
         transform="translate(-50%, -50%)"
         w="90%" // Responsive width
         maxW="450px" // Max width for larger screens
-        // h="auto" // Auto height based on content
         minH="300px" // Minimum height
         bg="#282730"
         zIndex={1001} // Ensure popup is above overlay
@@ -123,6 +133,50 @@ function LoginSignup({ open, onClose }: PopupProps) {
 
         {/* Form */}
         <Flex direction="column" gap={4} flexGrow={1}>
+          {/* First Name Input (Only in Sign Up view) */}
+          {!isLoginView && (
+            <Box>
+              <Text as="label" htmlFor="firstName" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+                First Name:
+              </Text>
+              <Input
+                id="firstName"
+                ref={firstNameRef}
+                border="0px"
+                bg="#45444D"
+                color="#CAC6C6"
+                _focus={{ borderColor: "#B2A5FF" }}
+                placeholder="Enter first name"
+                w="100%"
+                borderRadius="8px"
+                p="12px"
+                _placeholder={{ color: "#888" }}
+              />
+            </Box>
+          )}
+
+          {/* Last Name Input (Only in Sign Up view) */}
+          {!isLoginView && (
+            <Box>
+              <Text as="label" htmlFor="lastName" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
+                Last Name:
+              </Text>
+              <Input
+                id="lastName"
+                ref={lastNameRef}
+                border="0px"
+                bg="#45444D"
+                color="#CAC6C6"
+                _focus={{ borderColor: "#B2A5FF" }}
+                placeholder="Enter last name"
+                w="100%"
+                borderRadius="8px"
+                p="12px"
+                _placeholder={{ color: "#888" }}
+              />
+            </Box>
+          )}
+
           {/* Email Input */}
           <Box>
             <Text as="label" htmlFor="email" mb={1} display="block" fontWeight="600" fontSize="16px" color="#B2A5FF">
