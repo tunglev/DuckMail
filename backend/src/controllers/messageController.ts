@@ -35,7 +35,6 @@ export const getMessagesByEmail = async (req: Request, res: Response): Promise<v
     // Find messages where the user's email is either the sender or recipient
     const messages = await Message.find({
       $or: [
-        { sender: email },
         { recipient: email }
       ]
     });
