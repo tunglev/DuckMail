@@ -28,6 +28,8 @@ export interface Message {
   recipient: string;
   subject: string;
   body: string;
+  priority: string;
+  type: string;
   read?: boolean;
 }
 

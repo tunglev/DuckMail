@@ -5,15 +5,19 @@ import { Select as ChakraSelect } from '@chakra-ui/select';
 import { toaster } from "@/components/ui/toaster";
 
 import CloseIcon from '../assets/icons/Close.svg';
+import { messageApi } from '@/services/api';
+import { AuthUser } from '../services/api'; // Import the AuthUser interface
 
 interface PopupProps {
   open: boolean;
   onClose: () => void;
   buttonsData: any;
   setButtonsData: any;
+  user: AuthUser | null; // User data to display
+  fetchUserMessages: any;
 }
 
-function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps) {
+function ComposePopup({ open, onClose, buttonsData, setButtonsData, user, fetchUserMessages }: PopupProps) {
   const recipientRef = useRef<HTMLInputElement>(null);
   const subjectRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
@@ -58,24 +62,35 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps
       return;
     }
 
-    const currData = buttonsData;
-    currData.push({
-      receipient: recipientRef.current.value,
-      type: typeRef.current.value,
-      priority: priorityRef.current.value,
-      subject: subjectRef.current.value,
-      text: messageRef.current.value,
-      active: false
-    });
+    // const currData = buttonsData;
+    // currData.push({
+    //   recipient: recipientRef.current.value,
+    //   type: typeRef.current.value,
+    //   priority: priorityRef.current.value,
+    //   subject: subjectRef.current.value,
+    //   text: messageRef.current.value,
+    //   active: false
+    // });
 
-    setButtonsData(currData);
+    // setButtonsData(currData);
 
-    toaster.create({
-      description: "Notification Composed Successfully!",
-      type: "success",
-      duration: 3000,
-    });
-    onClose();
+    try {
+      messageApi.create({ sender: user.email, recipient: recipientRef.current.value, subject: subjectRef.current.value, body: messageRef.current.value, priority: priorityRef.current.value, type: typeRef.current.value });
+      fetchUserMessages();
+
+      toaster.create({
+        description: "Notification Composed Successfully!",
+        type: "success",
+        duration: 3000,
+      });
+      onClose();
+    } catch {
+      toaster.create({
+        description: "Failed to compose message",
+        type: "error",
+        duration: 3000,
+      });
+    }
   };
 
   return (

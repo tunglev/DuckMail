@@ -59,8 +59,8 @@ function App() {
         messageArr.push({
           recipient: elem.recipient,
           sender: elem.sender,
-          type: 'Policy',
-          priority: 'High',
+          type: elem.type,
+          priority: elem.priority,
           subject: elem.subject,
           text: elem.body,
           active: false
@@ -307,7 +307,7 @@ function App() {
       <LoginSignup open={loginSignupOpen} onClose={() => setLoginSignupOpen(false)} onLoginSuccess={handleLoginSuccess} />
       {/* Render ComposePopup only if logged in */}
       {console.log("Checking render condition for ComposePopup:", { shouldRender: !!currentUser && composeOpen, currentUserExists: !!currentUser, composeOpen })}
-      {currentUser && <ComposePopup open={composeOpen} onClose={handleComposeClose} buttonsData={buttonsData} setButtonsData={setButtonsData} />}
+      {currentUser && <ComposePopup open={composeOpen} onClose={handleComposeClose} buttonsData={buttonsData} setButtonsData={setButtonsData} user={currentUser} fetchUserMessages={fetchUserMessages} />}
       {/* Render UserProfilePopup */}
       <UserProfilePopup open={profileOpen} onClose={handleProfileClose} user={currentUser} />
 
