@@ -2,6 +2,7 @@
 import { Box, Button, Flex, Input, Text, Link } from '@chakra-ui/react';
 import { useRef, useState } from 'react'; // Import useState
 import { toaster } from "@/components/ui/toaster";
+import { sha256 } from 'js-sha256';
 import { authApi, AuthUser } from '../services/api'; // Import AuthUser type
 
 interface PopupProps {
@@ -29,7 +30,7 @@ function LoginSignup({ open, onClose, onLoginSuccess }: PopupProps) { // Destruc
 
     // Use usernameRef value for login
     const username = usernameRef.current.value.trim();
-    const password = passwordRef.current.value.trim();
+    let password = passwordRef.current.value.trim();
 
     if (!username || !password) {
        toaster.create({
@@ -39,6 +40,8 @@ function LoginSignup({ open, onClose, onLoginSuccess }: PopupProps) { // Destruc
       });
       return;
     }
+
+    password = sha256(password);
 
     setIsLoading(true); // Set loading true
 
@@ -75,7 +78,7 @@ function LoginSignup({ open, onClose, onLoginSuccess }: PopupProps) { // Destruc
     }
 
     const email = emailRef.current.value.trim();
-    const password = passwordRef.current.value.trim();
+    let password = passwordRef.current.value.trim();
     const firstName = firstNameRef.current.value.trim(); // Get first name
     const lastName = lastNameRef.current.value.trim();   // Get last name
     const username = usernameRef.current.value.trim(); // Get username
@@ -117,6 +120,8 @@ function LoginSignup({ open, onClose, onLoginSuccess }: PopupProps) { // Destruc
       return;
     }
     // ... end existing signup validation ...
+
+    password = sha256(password);
 
     setIsLoading(true); // Set loading true
 

@@ -37,15 +37,9 @@ function UserProfilePopup({ open, onClose, user }: UserProfilePopupProps) {
           <Text fontFamily="Poppins" fontWeight="700" color="white" fontSize="24px">
             User Profile
           </Text>
-          <IconButton
-            aria-label="Close profile"
-            icon={<img src={CloseIcon} alt="Close" />}
-            onClick={onClose}
-            size="sm"
-            variant="ghost"
-            colorScheme="purple" // Use a color scheme that fits your theme
-             _hover={{ bg: "#45444D" }}
-          />
+          <Button mb="10px" size="0px" onClick={onClose} bg="#B2A5FF" variant="solid">
+            <img src={CloseIcon} alt="Icon" />
+          </Button>
         </Flex>
 
         {/* Profile Details */}

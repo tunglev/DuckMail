@@ -114,15 +114,9 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps
             Compose
           </Text>
           {/* Use IconButton for consistency */}
-          <IconButton
-            aria-label="Close compose"
-            icon={<img src={CloseIcon} alt="Close" />}
-            onClick={onClose}
-            size="sm"
-            variant="ghost"
-            colorScheme="purple"
-            _hover={{ bg: "#45444D" }}
-          />
+          <Button mb="10px" size="0px" onClick={onClose} bg="#B2A5FF" variant="solid">
+            <img src={CloseIcon} alt="Icon" />
+          </Button>
         </Flex>
 
         {/* Form Content */}
@@ -138,6 +132,7 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps
               border="0px"
               bg="#45444D"
               color="#CAC6C6"
+              fontFamily="Poppins" 
               _focus={{ borderColor: "#B2A5FF" }}
               placeholder="Enter recipient email here"
               w="100%"
@@ -180,9 +175,11 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps
                 bg="#45444D"
                 color="#CAC6C6"
                 _focus={{ borderColor: "#B2A5FF" }}
+                fontFamily="Poppins" 
                 placeholder="Select Type"
                 w="100%"
                 borderRadius="8px"
+                icon={<></>}
                 // p="12px" // Select padding is handled differently
                 iconColor="#B2A5FF"
               >
@@ -202,10 +199,12 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData }: PopupProps
                 bg="#45444D"
                 color="#CAC6C6"
                 _focus={{ borderColor: "#B2A5FF" }}
+                fontFamily="Poppins" 
                 placeholder="Select Priority"
                 w="100%"
                 borderRadius="8px"
                 iconColor="#B2A5FF"
+                icon={<></>}
               >
                 <option style={{ backgroundColor: '#45444D' }} value="Low">Low</option>
                 <option style={{ backgroundColor: '#45444D' }} value="Medium">Medium</option>
