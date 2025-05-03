@@ -66,14 +66,14 @@ export const getMessageById = async (req: Request, res: Response): Promise<void>
 // Create a new message
 export const createMessage = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { sender, recipient, subject, body } = req.body;
+    const { sender, recipient, subject, body, priority, type } = req.body;
     
-    if (!sender || !recipient || !subject || !body) {
+    if (!sender || !recipient || !subject || !body || !priority || !type) {
       res.status(400).json({ success: false, error: 'Please provide all required fields' });
       return;
     }
     
-    const newMessage = await Message.create({ sender, recipient, subject, body });
+    const newMessage = await Message.create({ sender, recipient, subject, body, priority, type });
     res.status(201).json({ success: true, data: newMessage });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });

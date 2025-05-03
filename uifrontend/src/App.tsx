@@ -16,7 +16,7 @@ import UpdownIcon from './assets/icons/Updown.svg';
 import ComposePopup from './components/composepopup.tsx';
 import LoginSignup from './components/loginsignup.tsx';
 import UserProfilePopup from './components/UserProfilePopup.tsx'; // Import UserProfilePopup
-import { authApi, AuthUser } from './services/api'; // Import authApi and AuthUser
+import { authApi, AuthUser, messageApi } from './services/api'; // Import authApi and AuthUser
 
 function App() {
   const [composeOpen, setComposeOpen] = useState(false);
@@ -24,6 +24,10 @@ function App() {
   const [profileOpen, setProfileOpen] = useState(false); // State for profile popup
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null); // State for logged-in user
   const [filterState, setFilterState] = useState('All');
+
+  const notificationData = [];
+
+  const [buttonsData, setButtonsData] = useState(notificationData);
 
   // Check for existing logged-in user on component mount
   useEffect(() => {
@@ -34,8 +38,40 @@ function App() {
     } else {
       setLoginSignupOpen(true); // Show login if no user found
     }
+
+    fetchUserMessages();
   }, []);
 
+  const fetchUserMessages = async () => {
+    try {
+      const user = currentUser || authApi.getCurrentUser();
+      
+      if (!user) {
+        setLoginSignupOpen(true);
+        return;
+      }
+      
+      // Use email instead of username to fetch messages
+      const data = await messageApi.getUserMessages(user.email);
+
+      const messageArr: any = [];
+      data.forEach((elem) => {
+        messageArr.push({
+          recipient: elem.recipient,
+          sender: elem.sender,
+          type: 'Policy',
+          priority: 'High',
+          subject: elem.subject,
+          text: elem.body,
+          active: false
+        });
+      });
+
+      setButtonsData(messageArr);
+    } catch (err) {
+      console.log('Failed to fetch messages: ' + (err instanceof Error ? err.message : String(err)));
+    }
+  };
 
   const handleComposeClose = () => {
     console.log("handleComposeClose called. Setting composeOpen to false.");
@@ -64,59 +100,6 @@ function App() {
     setProfileOpen(false); // Close profile popup if open
     setLoginSignupOpen(true); // Show login popup again
   };
-
-  const notificationData = [
-    {
-      recipient: 'Test',
-      type: 'Policy',
-      priority: 'High',
-      subject: 'Important Update Regarding Policy #5585-2274',
-      text: 'Policy Button 1',
-      active: false
-    },
-    {
-      recipient: 'Test',
-      type: 'News',
-      priority: 'Low',
-      subject: 'Breaking News about Policies',
-      text: 'News Button 1',
-      active: false
-    },
-    {
-      recipient: 'Test',
-      type: 'Claim',
-      priority: 'Medium',
-      subject: 'New Claim Filed',
-      text: 'Claim Button 1',
-      active: false
-    },
-    {
-      recipient: 'Test',
-      type: 'Policy',
-      priority: 'High',
-      subject: 'New Policy Update #5585-2280',
-      text: 'Policy Button 2',
-      active: false
-    },
-    {
-      recipient: 'Test',
-      type: 'News',
-      priority: 'High',
-      subject: 'Latest Updates on Claims',
-      text: 'News Button 2',
-      active: false
-    },
-    {
-      recipient: 'Test',
-      type: 'Claim',
-      priority: 'Low',
-      subject: 'Claim Status Updated',
-      text: 'Claim Button 2',
-      active: false
-    },
-  ];
-
-  const [buttonsData, setButtonsData] = useState(notificationData);
 
   const handleToggle = (indexInFiltered: number) => {
     // Get index in buttonsData

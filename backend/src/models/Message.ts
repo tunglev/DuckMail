@@ -6,6 +6,8 @@ export interface IMessage extends Document {
   recipient: string;
   subject: string;
   body: string;
+  priority: string;
+  type: string;
   isRead: boolean;
   isStarred: boolean;
   isArchived: boolean;
@@ -29,6 +31,14 @@ const MessageSchema: Schema = new Schema(
       required: true,
     },
     body: {
+      type: String,
+      required: true,
+    },
+    priority: {
+      type: String,
+      required: true,
+    },
+    type: {
       type: String,
       required: true,
     },
