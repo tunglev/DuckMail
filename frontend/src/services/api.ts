@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://localhost:5500/api';
 
 export interface User {
   id?: string;
@@ -28,6 +28,8 @@ export interface Message {
   recipient: string;
   subject: string;
   body: string;
+  priority: string;
+  type: string;
   read?: boolean;
 }
 

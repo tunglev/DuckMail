@@ -1,0 +1,331 @@
+/* Modern Minimalist Styling for DuckMail */
+:root {
+  --primary-color: #3498db;
+  --primary-dark: #2980b9;
+  --accent-color: #1abc9c;
+  --text-color: #333333;
+  --text-light: #7f8c8d;
+  --border-color: #ecf0f1;
+  --bg-color: #ffffff;
+  --card-bg: #f9f9f9;
+  --danger-color: #e74c3c;
+  --success-color: #2ecc71;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --radius: 8px;
+  --transition: all 0.2s ease;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --accent-color: #1abc9c;
+    --text-color: #ecf0f1;
+    --text-light: #bdc3c7;
+    --border-color: #2c3e50;
+    --bg-color: #1a1a1a;
+    --card-bg: #2c3e50;
+  }
+}
+
+/* App container */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: var(--text-color);
+}
+
+/* Header styling */
+header {
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.5px;
+}
+
+/* Header content with flex layout for user info */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* User info styling */
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.welcome-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-button {
+  margin-left: 10px;
+}
+
+/* Tab navigation */
+.tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 2px solid transparent;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tabs button:hover {
+  color: var(--text-color);
+}
+
+.tabs button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+/* Panel container */
+.panel {
+  background-color: var(--bg-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Buttons */
+.button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  background-color: var(--text-light);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button.delete {
+  background-color: var(--danger-color);
+}
+
+.button + .button {
+  margin-left: 0.5rem;
+}
+
+/* Data display */
+.data-display {
+  margin-top: 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+}
+
+.data-display pre {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Cards */
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background-color: var(--card-bg);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.card.selected {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.card p {
+  margin-bottom: 0.5rem;
+}
+
+.card div {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Section styling */
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.section h2, .section h3 {
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  color: var(--text-color);
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section h3 {
+  font-size: 1.25rem;
+}
+
+/* Status messages */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.error {
+  color: var(--danger-color);
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.success {
+  color: var(--success-color);
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+/* Auth Panel Styling */
+.auth-modal {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--bg-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.auth-tabs button {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 2px solid transparent;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.auth-tabs button:hover {
+  color: var(--text-color);
+}
+
+.auth-tabs button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.auth-panel {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.user-greeting {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.user-greeting h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
