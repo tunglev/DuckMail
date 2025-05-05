@@ -104,7 +104,9 @@ NODE_ENV=development
   "sender": "test@example.com",
   "recipient": "user@example.com",
   "subject": "Hello",
-  "body": "This is a test message"
+  "body": "This is a test message",
+  "priority": "High",
+  "type": "Claims"
 }
 ```
 5. Click Send
@@ -142,6 +144,8 @@ The API is integrated with MongoDB using Mongoose. The database connection is es
   recipient: string;
   subject: string;
   body: string;
+  priority: string;
+  type: string;
   isRead: boolean;
   isStarred: boolean;
   isArchived: boolean;
