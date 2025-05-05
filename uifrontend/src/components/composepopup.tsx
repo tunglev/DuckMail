@@ -62,18 +62,6 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData, user, fetchU
       return;
     }
 
-    // const currData = buttonsData;
-    // currData.push({
-    //   recipient: recipientRef.current.value,
-    //   type: typeRef.current.value,
-    //   priority: priorityRef.current.value,
-    //   subject: subjectRef.current.value,
-    //   text: messageRef.current.value,
-    //   active: false
-    // });
-
-    // setButtonsData(currData);
-
     try {
       messageApi.create({ sender: user.email, recipient: recipientRef.current.value, subject: subjectRef.current.value, body: messageRef.current.value, priority: priorityRef.current.value, type: typeRef.current.value });
       fetchUserMessages();

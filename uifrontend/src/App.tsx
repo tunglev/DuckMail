@@ -283,6 +283,7 @@ function App() {
                 <Flex gap="25px">
                   <Text><Text as="span" color="#B2A5FF">Type: </Text>{button.type}</Text>
                   <Text><Text as="span" color="#B2A5FF">Priority: </Text>{button.priority}</Text>
+                  <Text><Text as="span" color="#B2A5FF">Sender: </Text>{button.sender}</Text>
                   <Text><Text as="span" color="#B2A5FF">Subject: </Text>{button.subject}</Text>
                 </Flex>
 
