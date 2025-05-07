@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // Import useEffect
+import { useState, useEffect, useCallback } from 'react'; // Import useEffect and useCallback
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css';
@@ -16,7 +16,12 @@ import UpdownIcon from './assets/icons/Updown.svg';
 import ComposePopup from './components/composepopup.tsx';
 import LoginSignup from './components/loginsignup.tsx';
 import UserProfilePopup from './components/UserProfilePopup.tsx'; // Import UserProfilePopup
-import { authApi, AuthUser, messageApi } from './services/api.ts'; // Import authApi and AuthUser
+import { authApi, AuthUser, messageApi, Message } from './services/api.ts'; // Import authApi and AuthUser
+
+interface AppButtonData extends Message {
+  active: boolean;
+  text: string;
+}
 
 function App() {
   const [composeOpen, setComposeOpen] = useState(false);
@@ -25,53 +30,51 @@ function App() {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null); // State for logged-in user
   const [filterState, setFilterState] = useState('All');
 
-  const notificationData = [];
+  const [buttonsData, setButtonsData] = useState<AppButtonData[]>([]); // Initialize as empty array
 
-  const [buttonsData, setButtonsData] = useState(notificationData);
+  const fetchUserMessages = useCallback(async () => {
+    if (currentUser) {
+      try {
+        // console.log(`Fetching messages for ${currentUser.email}`); // Optional debug log
+        const data = await messageApi.getUserMessages(currentUser.email);
+        const messageArr: AppButtonData[] = data.map(elem => ({
+          ...elem, // Spread all properties from Message interface
+          id: elem.id || Date.now().toString() + Math.random().toString(), // Fallback for key if id is missing
+          text: elem.body,
+          active: false
+        }));
+        setButtonsData(messageArr);
+      } catch (err) {
+        console.error('Failed to fetch messages:', err);
+        setButtonsData([]); // Clear data on error to avoid stale display
+      }
+    } else {
+      // If currentUser is null, ensure messages are cleared
+      setButtonsData([]);
+    }
+  }, [currentUser, setButtonsData]); // Dependencies for useCallback
 
-  // Check for existing logged-in user on component mount
+  // Effect for initial user loading - runs only once on mount
   useEffect(() => {
     const user = authApi.getCurrentUser();
     if (user) {
       setCurrentUser(user);
-      setLoginSignupOpen(false); // Don't show login if already logged in
+      setLoginSignupOpen(false);
     } else {
-      setLoginSignupOpen(true); // Show login if no user found
+      setLoginSignupOpen(true); // No user found, ensure login is open
     }
+  }, []); // Empty dependency array ensures this runs only once
 
-    fetchUserMessages();
-  }, []);
-
-  const fetchUserMessages = async () => {
-    try {
-      const user = currentUser || authApi.getCurrentUser();
-      
-      if (!user) {
-        setLoginSignupOpen(true);
-        return;
-      }
-      
-      // Use email instead of username to fetch messages
-      const data = await messageApi.getUserMessages(user.email);
-
-      const messageArr: any = [];
-      data.forEach((elem) => {
-        messageArr.push({
-          recipient: elem.recipient,
-          sender: elem.sender,
-          type: elem.type,
-          priority: elem.priority,
-          subject: elem.subject,
-          text: elem.body,
-          active: false
-        });
-      });
-
-      setButtonsData(messageArr);
-    } catch (err) {
-      console.log('Failed to fetch messages: ' + (err instanceof Error ? err.message : String(err)));
+  // Effect to fetch messages when currentUser is set/changed (e.g., after login or initial load)
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserMessages();
+    } else {
+      // When currentUser becomes null (e.g., logout or initial state before user is loaded)
+      setButtonsData([]); // Clear messages
+      // setLoginSignupOpen(true); // This is handled by initial useEffect and handleLogout
     }
-  };
+  }, [currentUser, fetchUserMessages]); // Runs when currentUser or fetchUserMessages reference changes
 
   const handleComposeClose = () => {
     console.log("handleComposeClose called. Setting composeOpen to false.");
@@ -92,6 +95,7 @@ function App() {
     console.log("handleLoginSuccess called with user:", user);
     setCurrentUser(user); // Set the current user state
     setLoginSignupOpen(false); // Close the login popup
+    // fetchUserMessages(); // No longer needed here, useEffect above handles it
   };
 
   const handleLogout = () => {
@@ -99,6 +103,7 @@ function App() {
     setCurrentUser(null); // Clear user state
     setProfileOpen(false); // Close profile popup if open
     setLoginSignupOpen(true); // Show login popup again
+    // setButtonsData([]); // This is now handled by the useEffect watching currentUser
   };
 
   const handleToggle = (indexInFiltered: number) => {
