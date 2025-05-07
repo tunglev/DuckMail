@@ -148,6 +148,9 @@ function App() {
             <Button onClick={handleProfileOpen} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
               View Profile
             </Button>
+            <Button onClick={fetchUserMessages} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
+              Refresh
+            </Button>
             <Button onClick={handleLogout} fontFamily="Poppins" fontWeight="600" color="white" bg="#B2A5FF" variant="solid" fontSize="16px">
               Logout
             </Button>
