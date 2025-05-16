@@ -187,7 +187,7 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData, user, fetchU
                 iconColor="#B2A5FF"
               >
                 <option style={{ backgroundColor: '#45444D' }} value="Policy">Policy</option>
-                <option style={{ backgroundColor: '#45444D' }} value="News">News</option>
+                <option selected style={{ backgroundColor: '#45444D' }} value="News">News</option>
                 <option style={{ backgroundColor: '#45444D' }} value="Claim">Claim</option>
               </ChakraSelect>
             </Box>
@@ -209,7 +209,7 @@ function ComposePopup({ open, onClose, buttonsData, setButtonsData, user, fetchU
                 iconColor="#B2A5FF"
                 icon={<></>}
               >
-                <option style={{ backgroundColor: '#45444D' }} value="Low">Low</option>
+                <option selected style={{ backgroundColor: '#45444D' }} value="Low">Low</option>
                 <option style={{ backgroundColor: '#45444D' }} value="Medium">Medium</option>
                 <option style={{ backgroundColor: '#45444D' }} value="High">High</option>
               </ChakraSelect>
